@@ -1,0 +1,10 @@
+{
+  "lock": false,
+  "license": "MIT",
+  "tasks": {
+    "dev": "deno run --allow-all ./source/main.ts"
+  },
+  "imports": {
+    "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.5"
+  }
+}
