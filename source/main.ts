@@ -1,5 +1,7 @@
 import { Command } from "@cliffy/command";
 
+console.log("hello!");
+
 await new Command()
   .name("cliffy")
   .version("0.1.0")
