@@ -1,6 +1,6 @@
 import { Command } from "/Users/jegnum/Programming/Projects/DOT/deps.ts";
 
-async function readGitConfigFile(filePath: string) {
+export async function readGitConfigFile(filePath: string) {
   try {
     const content = await Deno.readTextFile(filePath);
     const lines = content.split('\n');
@@ -16,7 +16,7 @@ async function readGitConfigFile(filePath: string) {
 }
 
 
-
+/* 
 await new Command()
   .name("config-reader")
   .version("1.0.0")
@@ -28,4 +28,4 @@ await new Command()
     await readGitConfigFile(options.file);
   })
   .parse(Deno.args);
-  
+*/

@@ -1,6 +1,9 @@
 import { Command } from "../deps.ts";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 // Почему то через аналогичный с Command испорт делать не хочет 
+import {readGitConfigFile} from "/Users/jegnum/Programming/Projects/DOT/source/commands/readGitConfigFile.ts"
+
+const PATHTOGITCONFIG = "/Users/jegnum/.ssh/config"
 
 async function displayMenu() {
   const result = await Select.prompt({
@@ -16,6 +19,7 @@ async function displayMenu() {
       console.log("and hello to you");
       break;
     case "2":
+      readGitConfigFile(`${PATHTOGITCONFIG}`)
       console.log("clarifying");
       break;
     default:
