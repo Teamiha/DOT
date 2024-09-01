@@ -26,9 +26,20 @@ async function createNewProfile() {
   
   console.log("Retrieved user:", savedUser.value);
   
-  // Close the database connection
   kv.close();
   
 }
 
-createNewProfile()
+async function getProfileList() {
+  const kv = await Deno.openKv();
+  
+  const rez = await kv.get(["users"]);
+  
+  console.log(rez.value)
+  
+  kv.close();
+}
+
+//createNewProfile()
+
+getProfileList()
