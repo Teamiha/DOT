@@ -18,13 +18,14 @@ async function createNewProfile() {
   
   const newUser = { "Name": name };
   
-  await kv.set(["users", newUser.Name], newUser)
+  await kv.set(["users", newUser.Name], newUser);
   
   console.log(`User ${name} saved successfully`);
   
   const savedUser = await kv.get(["users", name]);
   
   console.log("Retrieved user:", savedUser.value);
+  console.log(savedUser)
   
   kv.close();
   
@@ -33,13 +34,13 @@ async function createNewProfile() {
 async function getProfileList() {
   const kv = await Deno.openKv();
   
-  const rez = await kv.get(["users"]);
+  const rez = await kv.get(["users", "A"]);
   
-  console.log(rez.value)
+  console.log(rez);
   
   kv.close();
 }
 
-//createNewProfile()
+// createNewProfile()
 
 getProfileList()
