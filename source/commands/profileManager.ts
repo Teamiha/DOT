@@ -13,16 +13,20 @@ async function getUserInput(prompt: string): Promise<string> {
 
 async function createNewProfile() {
   const name = await getUserInput("Please enter a name:");
+  const ssh = undefined;
   
   const kv = await Deno.openKv();
   
-  const newUser = { "Name": name };
+  // const newUser = { "Name": name };
   
-  await kv.set(["users", newUser.Name], newUser);
+  const newSsh = { "SSH": ssh }
+  
+  await kv.set([name], newSsh);
   
   console.log(`User ${name} saved successfully`);
   
-  const savedUser = await kv.get(["users", name]);
+  // const savedUser = await kv.get(["users", name]);
+  const savedUser = await kv.get([name]);
   
   console.log("Retrieved user:", savedUser.value);
   console.log(savedUser)
@@ -34,13 +38,13 @@ async function createNewProfile() {
 async function getProfileList() {
   const kv = await Deno.openKv();
   
-  const rez = await kv.get(["users", "A"]);
+  const rez = await kv.list
   
   console.log(rez);
   
   kv.close();
 }
 
-// createNewProfile()
+createNewProfile()
 
-getProfileList()
+// getProfileList()
