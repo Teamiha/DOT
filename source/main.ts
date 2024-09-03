@@ -30,7 +30,8 @@ async function displayMenu() {
       getProfileList()
       break;
     case "10":
-      Deno.exit(1)   
+      Deno.exit(1)
+      break;  
     default:
       console.log("Invalid option");
   }
@@ -44,21 +45,6 @@ async function main() {
 }
 
 main();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* 
