@@ -1,4 +1,4 @@
-import { Command } from "/Users/jegnum/Programming/Projects/DOT/deps.ts";
+import { Command } from "@cliffy/command";
 
 export async function readGitConfigFile(filePath: string) {
   try {

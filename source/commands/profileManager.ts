@@ -1,4 +1,4 @@
-import { Command } from "/Users/jegnum/Programming/Projects/DOT/deps.ts"
+import { Command } from "@cliffy/command"
 import { readLines } from "https://deno.land/std/io/mod.ts"
 
 export async function getUserInput(prompt: string): Promise<string> {

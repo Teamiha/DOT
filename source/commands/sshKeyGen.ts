@@ -28,23 +28,30 @@ export async function createNewSshKey() {
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
     const sshKeyAdress = { "Adress": `~/.ssh/${name}` }
-    await kv.set(["Name:", name], sshKeyAdress);
+    await kv.set(["SSH:", name], sshKeyAdress);
   } else {
     console.log("Error: SSH key generation failed");
+  }
+  kv.close();
+}
+
+export async function showAllSshKeys() {
+  const kv = await Deno.openKv();
+  const iter = await kv.list<string>({ prefix: ["SSH:"] });
+  const keys = [];
+  
+  for await (const res of iter) keys.push(res);
+  for (let i = 0; i < keys.length; i++) {
+    console.log(keys[i])
   }
 
   kv.close();
 }
 
+  
+// createNewSshKey();
+showAllSshKeys();
 
-  async function test() {
-    const testlog = await getUserInput("Enter:");
-    console.log(testlog);
 
-
-  }
-
-createNewSshKey();
-// test();
 
 
