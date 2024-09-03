@@ -18,6 +18,14 @@ export async function getUserInput(prompt: string): Promise<string> {
     throw new Error("No input received");
   }
 
+export async function createNewSshKey() {
+  const name = await getUserInput("Enter a name for the SSH key:");
+  const email = await getUserInput("Enter your email:");
+  const ssh = await zsh (`ssh-keygen -t ed25519 -C ${email} -f ~/.ssh/${name}`);
+  console.log(ssh);
+}
+
+
   async function test() {
     const testlog = await getUserInput("Enter:");
     console.log(testlog);
@@ -25,6 +33,7 @@ export async function getUserInput(prompt: string): Promise<string> {
 
   }
 
-test();
+createNewSshKey();
+// test();
 
 
