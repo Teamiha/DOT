@@ -5,6 +5,7 @@ import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import {readGitConfigFile} from "../source/commands/readGitConfigFile.ts"
 import {getUserInput, createNewProfile, getProfileList} from "../source/commands/profileManager.ts"
 import {showAllSshKeys} from "../source/commands/sshKeyGen.ts"
+import {confirmTermination} from "../source/commands/clearAllDenoKv.ts"
 
 const PATHTOGITCONFIG = "/Users/jegnum/.ssh/config"
 
@@ -16,6 +17,7 @@ async function displayMenu() {
       { name: "Status", value: "2" },
       { name: "List all Users", value: "3" },
       { name: "List all SSH keys", value: "4" },
+      { name: "Terminate all DataBase", value: "9" },
       { name: "Exit", value: "10" },
     ],
   });
@@ -34,13 +36,19 @@ async function displayMenu() {
     case "4":
       showAllSshKeys()
       break;
+    case "9":
+      await confirmTermination()
+      break;
     case "10":
-      Deno.exit(1)
+      Deno.exit(0)
       break;  
     default:
       console.log("Invalid option");
   }
 }
+
+
+
 
 async function main() {
   while (true) {
@@ -50,12 +58,3 @@ async function main() {
 }
 
 main();
-
-
-/* 
-await new Command()
-  .name("cliffy")
-  .version("0.1.0")
-  .description("Command line framework for Deno")
-  .parse(Deno.args);
-  */
