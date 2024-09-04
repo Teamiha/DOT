@@ -1,5 +1,6 @@
 import { Command } from "@cliffy/command"
 import { readLines } from "https://deno.land/std/io/mod.ts"
+import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 
 export async function getUserInput(prompt: string): Promise<string> {
   console.log(prompt);
@@ -11,7 +12,7 @@ export async function getUserInput(prompt: string): Promise<string> {
 
 export async function createNewProfile() {
   const name = await getUserInput("Please enter a name:");
-  const ssh = undefined;
+  const ssh = "Empty";
   const kv = await Deno.openKv();
   const newSsh = { "SSH": ssh }
   
@@ -26,7 +27,7 @@ export async function createNewProfile() {
   kv.close();
 }
 
-export async function getProfileList() {
+export async function getProfileList(): Promise<Array<Deno.KvEntry<string>>> {
   const kv = await Deno.openKv();
   
   const iter = kv.list<string>({ prefix: ["Name:"] });
@@ -38,8 +39,27 @@ export async function getProfileList() {
   }
     
   kv.close();
+  return users;
 }
+
+async function chooseProfile() {
+  const userList = await getProfileList();
+  if (userList.length > 0) {
+    const selectedUser = await Select.prompt({
+      message: "Choose user:",
+      options: userList.map(key => ({
+        name: key.key[1] as string,
+        value: key.value[1] as string,
+      })),
+    });
+    console.log(`You selected: ${selectedUser}`);
+  } else {
+    console.log("No users found.");
+  }
+}
+
 
 // createNewProfile()
 
 // getProfileList()
+chooseProfile()

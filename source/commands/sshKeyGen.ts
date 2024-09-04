@@ -1,5 +1,6 @@
 import { readLines } from "https://deno.land/std/io/mod.ts"
 import { shelly, zsh } from "@vseplet/shelly";
+import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
@@ -35,28 +36,37 @@ export async function createNewSshKey() {
   kv.close();
 }
 
-export async function showAllSshKeys() {
+export async function getAllSshKeysList(): Promise<Array<Deno.KvEntry<string>>> {
   const kv = await Deno.openKv();
   const iter = await kv.list<string>({ prefix: ["SSH:"] });
   const keys = [];
   
   for await (const res of iter) keys.push(res);
-  for (let i = 0; i < keys.length; i++) {
-    console.log(keys[i])
+
+  kv.close();
+  return keys;
+}
+
+
+export async function selectSshKey() {
+  const sshKeys = await getAllSshKeysList();
+  if (sshKeys.length > 0) {
+    const selectedKey = await Select.prompt({
+      message: "Choose an SSH key:",
+      options: sshKeys.map(key => ({
+        name: key.key[1],
+        value: key.key[1]
+      })),
+    });
+    console.log(`You selected: ${selectedKey}`);
+  } else {
+    console.log("No SSH keys found.");
   }
-
-  kv.close();
 }
 
-export async function addSshKeyToGitConfig() {
-  const kv = await Deno.openKv();
-  
-  kv.close();
-}
-
-  
 // createNewSshKey();
-// showAllSshKeys();
+// getAllSshKeysList();
+// selectSshKey()
 
 
 
