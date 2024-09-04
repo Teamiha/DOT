@@ -14,9 +14,9 @@ export async function createNewProfile() {
   const name = await getUserInput("Please enter a name:");
   const ssh = "Empty";
   const kv = await Deno.openKv();
-  const newSsh = { "SSH": ssh }
+  const newSsh = ssh 
   
-  await kv.set(["Name:", name], newSsh);
+  await kv.set(["Name:", name], ["SSH", ssh]);
   
   console.log(`User ${name} saved successfully`);
   
@@ -49,17 +49,20 @@ async function chooseProfile() {
       message: "Choose user:",
       options: userList.map(key => ({
         name: key.key[1] as string,
-        value: key.value[1] as string,
+        value: { name: key.key[1], ssh: key.value[1] },
       })),
     });
-    console.log(`You selected: ${selectedUser}`);
+    const { name, ssh } = (selectedUser);
+    console.log(`You selected: ${name}`);
+    console.log(`SSH value: ${ssh}`);
   } else {
     console.log("No users found.");
   }
 }
 
 
+
 // createNewProfile()
 
 // getProfileList()
-chooseProfile()
+// chooseProfile()

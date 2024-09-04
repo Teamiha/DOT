@@ -54,8 +54,8 @@ export async function selectSshKey() {
     const selectedKey = await Select.prompt({
       message: "Choose an SSH key:",
       options: sshKeys.map(key => ({
-        name: key.key[1],
-        value: key.key[1]
+        name: key.key[1] as string,
+        value: key.key[1] as string
       })),
     });
     console.log(`You selected: ${selectedKey}`);
