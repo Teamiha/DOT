@@ -4,6 +4,7 @@ import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 // Почему то через аналогичный с Command испорт делать не хочет 
 import {readGitConfigFile} from "../source/commands/readGitConfigFile.ts"
 import {getUserInput, createNewProfile, getProfileList} from "../source/commands/profileManager.ts"
+import {showAllSshKeys} from "../source/commands/sshKeyGen.ts"
 
 const PATHTOGITCONFIG = "/Users/jegnum/.ssh/config"
 
@@ -13,7 +14,8 @@ async function displayMenu() {
     options: [
       { name: "Hello", value: "1" },
       { name: "Status", value: "2" },
-      { name: "List all users", value: "3" },
+      { name: "List all Users", value: "3" },
+      { name: "List all SSH keys", value: "4" },
       { name: "Exit", value: "10" },
     ],
   });
@@ -28,6 +30,9 @@ async function displayMenu() {
       break;
     case "3":
       getProfileList()
+      break;
+    case "4":
+      showAllSshKeys()
       break;
     case "10":
       Deno.exit(1)

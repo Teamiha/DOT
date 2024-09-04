@@ -48,9 +48,15 @@ export async function showAllSshKeys() {
   kv.close();
 }
 
+export async function addSshKeyToGitConfig() {
+  const kv = await Deno.openKv();
+  
+  kv.close();
+}
+
   
 // createNewSshKey();
-showAllSshKeys();
+// showAllSshKeys();
 
 
 
