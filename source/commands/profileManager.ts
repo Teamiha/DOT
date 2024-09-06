@@ -42,7 +42,7 @@ export async function getProfileList(): Promise<Array<Deno.KvEntry<string>>> {
   return users;
 }
 
-async function chooseProfile() {
+export async function chooseProfile() {
   const userList = await getProfileList();
   if (userList.length > 0) {
     const selectedUser = await Select.prompt({
