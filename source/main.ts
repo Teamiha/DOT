@@ -8,7 +8,7 @@ import {selectSshKey} from "../source/commands/sshKeyGen.ts"
 import {confirmTermination} from "../source/commands/clearAllDenoKv.ts"
 
 const USERNAME = Deno.env.get("USER");
-const PATHTOGITCONFIG = `/Users/${USERNAME}/.ssh/config`
+const PATHTOGITCONFIG = `/Users/${USERNAME}/.ssh/config`;
 
 async function displayMenu() {
   const result = await Select.prompt({
