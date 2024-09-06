@@ -14,9 +14,31 @@ export async function connectUserToSsh() {
         })),
       });
       const { name, ssh } = (selectedUser);
+
+      const selectedSsh = await Select.prompt({
+        message: "Choose SSH:",
+        options: sshList.map(key => ({
+          name: key.key[1] as string,
+          value: { nameKey: key.key[1], sshKey: key.value[1] },
+        })),
+      });
+
+      const { nameKey, sshKey } = (selectedSsh);
+      console.log(`SSH key: ${nameKey}`);
+
+
       console.log(`You selected: ${name}`);
       console.log(`SSH value: ${ssh}`);
+
+      console.log(`You selected ssh key: ${nameKey}`);
+
+      
+
+
+
     } else {
       console.log("No users found.");
     }
   }
+
+  connectUserToSsh();

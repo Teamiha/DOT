@@ -18,7 +18,6 @@ async function clearEntireDatabase(kv: Deno.Kv): Promise<void> {
       }
     }
   
-    // Delete any remaining entries
     if (batch.length > 0) {
       const atomicOp = kv.atomic();
       for (const key of batch) {
@@ -43,5 +42,5 @@ export async function confirmTermination() {
         } else {
           console.log("Database termination cancelled.");
         }
-  }
+}
   

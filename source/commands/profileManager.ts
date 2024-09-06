@@ -34,9 +34,9 @@ export async function getProfileList(): Promise<Array<Deno.KvEntry<string>>> {
   const users = [];
   
   for await (const res of iter) users.push(res);
-  for (let i = 0; i < users.length; i++) {
-    console.log(users[i])
-  }
+  // for (let i = 0; i < users.length; i++) {
+  //   console.log(users[i])
+  // }
     
   kv.close();
   return users;
