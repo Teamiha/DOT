@@ -54,18 +54,24 @@ export async function chooseProfile() {
   }
 }
 
-async function chooseProfileBeta(dataArray: Array<Deno.KvEntry<string>>, action: (selectedObject: any) => void) {
+async function chooseProfileBeta(dataArray: Array<Deno.KvEntry<string>>, action: (first: string, second: string) => void) {
   const data = await dataArray;
   if (data.length > 0) {
     const selectedObject = await Select.prompt({
       message: "Choose user:",
       options: data.map(key => ({
         name: key.key[1] as string,
-        value: { name: key.key[1], ssh: key.value[1] },
+        value: { first: key.key[1], second: key.value[1] },
       })),
     });
 
-    action(selectedObject);
+    console.log(selectedObject.value as { first: string, second: string });
+
+    const { first, second } = selectedObject;
+    
+
+
+    action(first as string, second as string);
 
   } else {
     console.log("No data found.");
@@ -74,8 +80,8 @@ async function chooseProfileBeta(dataArray: Array<Deno.KvEntry<string>>, action:
 
 async function testChooseProfileBeta() {
   const data = await getProfileList();
-  chooseProfileBeta(data, (selectedObject) => {
-    console.log(selectedObject);
+  chooseProfileBeta(data, (name, ssh) => {
+    console.log(name, ssh);
   });
 }
 

@@ -29,7 +29,7 @@ export async function createNewSshKey() {
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
     const sshKeyAdress = { "Adress": `~/.ssh/${name}` }
-    await kv.set(["SSH:", name], sshKeyAdress);
+    await kv.set(["SSH:", name], ["keyAdress", sshKeyAdress]);
   } else {
     console.log("Error: SSH key generation failed");
   }
