@@ -3,50 +3,49 @@ import { getProfileList } from "./profileManager.ts";
 import { getAllSshKeysList } from "./sshKeyGen.ts";
 
 async function keyRecording(user: string, sshKey: string) {
-    const kv = await Deno.openKv();
-    // const existingUser = await kv.get(["Name:", user]);
+  const kv = await Deno.openKv();
+  // const existingUser = await kv.get(["Name:", user]);
 
-    await kv.set(["Name:", user], ["SSH", sshKey]);
+  await kv.set(["Name:", user], ["SSH", sshKey]);
 
-    console.log(`User ${user} connected to SSH key ${sshKey}`);
+  console.log(`User ${user} connected to SSH key ${sshKey}`);
 
-    kv.close();
+  kv.close();
 }
 
 export async function connectUserToSsh() {
-    const userList = await getProfileList();
-    const sshList = await getAllSshKeysList();
-    
-    if (userList.length > 0) {
-      const selectedUser = await Select.prompt({
-        message: "Choose user:",
-        options: userList.map(key => ({
-          name: key.key[1] as string,
-          value: { name: key.key[1], ssh: key.value[1] },
-        })),
-      });
-      const { name, ssh } = (selectedUser);
+  const userList = await getProfileList();
+  const sshList = await getAllSshKeysList();
 
-      const selectedSsh = await Select.prompt({
-        message: "Choose SSH:",
-        options: sshList.map(key => ({
-          name: key.key[1] as string,
-          value: { nameKey: key.key[1], sshKey: key.value[1] },
-        })),
-      });
+  if (userList.length > 0) {
+    const selectedUser = await Select.prompt({
+      message: "Choose user:",
+      options: userList.map((key) => ({
+        name: key.key[1] as string,
+        value: { name: key.key[1], ssh: key.value[1] },
+      })),
+    });
+    const { name, ssh } = selectedUser;
 
-      const { nameKey, sshKey } = (selectedSsh);
+    const selectedSsh = await Select.prompt({
+      message: "Choose SSH:",
+      options: sshList.map((key) => ({
+        name: key.key[1] as string,
+        value: { nameKey: key.key[1], sshKey: key.value[1] },
+      })),
+    });
 
-      console.log(`SSH key: ${nameKey}`);
-      console.log(`You selected: ${name}`);
-      console.log(`SSH value: ${ssh}`);
-      console.log(`You selected ssh key: ${nameKey}`);
+    const { nameKey, sshKey } = selectedSsh;
 
-      await keyRecording(name, nameKey);
-      
-    } else {
-      console.log("No users found.");
-    }
+    console.log(`SSH key: ${nameKey}`);
+    console.log(`You selected: ${name}`);
+    console.log(`SSH value: ${ssh}`);
+    console.log(`You selected ssh key: ${nameKey}`);
+
+    await keyRecording(name, nameKey);
+  } else {
+    console.log("No users found.");
   }
+}
 
 //   connectUserToSsh();

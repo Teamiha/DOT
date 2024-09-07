@@ -3,7 +3,7 @@ import { Command } from "@cliffy/command";
 export async function readGitConfigFile(filePath: string) {
   try {
     const content = await Deno.readTextFile(filePath);
-    const lines = content.split('\n');
+    const lines = content.split("\n");
 
     for (const line of lines) {
       const trimmedLine = line.trim();
@@ -15,8 +15,7 @@ export async function readGitConfigFile(filePath: string) {
   }
 }
 
-
-/* 
+/*
 await new Command()
   .name("config-reader")
   .version("1.0.0")
@@ -29,4 +28,3 @@ await new Command()
   })
   .parse(Deno.args);
 */
-
