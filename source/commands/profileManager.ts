@@ -20,10 +20,6 @@ export async function createNewProfile() {
   
   console.log(`User ${name} saved successfully`);
   
-  // const savedUser = await kv.get([name]);
-  // console.log("Retrieved user:", savedUser.value);
-  // console.log(savedUser)
-  
   kv.close();
 }
 
@@ -34,20 +30,18 @@ export async function getProfileList(): Promise<Array<Deno.KvEntry<string>>> {
   const users = [];
   
   for await (const res of iter) users.push(res);
-  // for (let i = 0; i < users.length; i++) {
-  //   console.log(users[i])
-  // }
     
   kv.close();
+
   return users;
 }
 
 export async function chooseProfile() {
-  const userList = await getProfileList();
-  if (userList.length > 0) {
+  const data = await getProfileList();
+  if (data.length > 0) {
     const selectedUser = await Select.prompt({
       message: "Choose user:",
-      options: userList.map(key => ({
+      options: data.map(key => ({
         name: key.key[1] as string,
         value: { name: key.key[1], ssh: key.value[1] },
       })),
@@ -60,10 +54,40 @@ export async function chooseProfile() {
   }
 }
 
+async function chooseProfileBeta(dataArray: Array<Deno.KvEntry<string>>, action: (selectedObject: any) => void) {
+  const data = await dataArray;
+  if (data.length > 0) {
+    const selectedObject = await Select.prompt({
+      message: "Choose user:",
+      options: data.map(key => ({
+        name: key.key[1] as string,
+        value: { name: key.key[1], ssh: key.value[1] },
+      })),
+    });
 
+    action(selectedObject);
+
+  } else {
+    console.log("No data found.");
+  }
+}
+
+async function testChooseProfileBeta() {
+  const data = await getProfileList();
+  chooseProfileBeta(data, (selectedObject) => {
+    console.log(selectedObject);
+  });
+}
+
+export async function deleteProfile() {
+  const data = await getProfileList();
+  
+}
 
 
 // createNewProfile()
 
 // getProfileList()
 // chooseProfile()
+
+testChooseProfileBeta()
