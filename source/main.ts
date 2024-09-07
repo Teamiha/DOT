@@ -3,7 +3,7 @@ import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 // import { readLines } from "https://deno.land/std/io/mod.ts"
 // Почему то через аналогичный с Command испорт делать не хочет 
 import {readGitConfigFile} from "../source/commands/readGitConfigFile.ts"
-import {getUserInput, createNewProfile, getProfileList} from "../source/commands/profileManager.ts"
+import {getUserInput, createNewProfile, chooseProfile} from "../source/commands/profileManager.ts"
 import {selectSshKey} from "../source/commands/sshKeyGen.ts"
 import {confirmTermination} from "../source/commands/clearAllDenoKv.ts"
 
@@ -31,7 +31,7 @@ async function displayMenu() {
       readGitConfigFile(`${PATHTOGITCONFIG}`)
       break;
     case "3":
-      getProfileList()
+      await chooseProfile()
       break;
     case "4":
       selectSshKey()
