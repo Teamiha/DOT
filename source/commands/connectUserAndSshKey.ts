@@ -4,24 +4,19 @@ import { getAllSshKeysList } from "./sshKeyGen.ts";
 
 async function keyRecording(user: string, sshKey: string) {
     const kv = await Deno.openKv();
-    const existingUser = await kv.get(["Name:", user]);
+    // const existingUser = await kv.get(["Name:", user]);
 
     await kv.set(["Name:", user], ["SSH", sshKey]);
-
 
     console.log(`User ${user} connected to SSH key ${sshKey}`);
 
     kv.close();
 }
 
-
-
-
-
-
 export async function connectUserToSsh() {
     const userList = await getProfileList();
     const sshList = await getAllSshKeysList();
+    
     if (userList.length > 0) {
       const selectedUser = await Select.prompt({
         message: "Choose user:",
@@ -41,23 +36,17 @@ export async function connectUserToSsh() {
       });
 
       const { nameKey, sshKey } = (selectedSsh);
+
       console.log(`SSH key: ${nameKey}`);
-
-
       console.log(`You selected: ${name}`);
       console.log(`SSH value: ${ssh}`);
-
       console.log(`You selected ssh key: ${nameKey}`);
-
 
       await keyRecording(name, nameKey);
       
-
-
-
     } else {
       console.log("No users found.");
     }
   }
 
-  connectUserToSsh();
+//   connectUserToSsh();
