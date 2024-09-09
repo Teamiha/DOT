@@ -10,13 +10,17 @@ export async function getUserInput(prompt: string): Promise<string> {
   throw new Error("No input received");
 }
 
+
+// TODO: Добавить емейл 
+
 export async function createNewProfile() {
   const name = await getUserInput("Please enter a name:");
+  const email = await getUserInput("Please enter a email:");
   const ssh = "Empty";
   const kv = await Deno.openKv();
   const newSsh = ssh;
 
-  await kv.set(["Name:", name], ["SSH", ssh]);
+  await kv.set(["Name:", name, "Email:", email], ["SSH", ssh]);
 
   console.log(`User ${name} saved successfully`);
 
@@ -69,18 +73,17 @@ async function chooseProfileBeta(
       })),
     });
 
-    console.log(selectedObject);
+    console.log("selectedObject:", selectedObject);
 
-    // console.log(selectedObject.value as { first: string; second: string });
-
-    // TODO временный костыль
     const { first, second } = selectedObject as unknown as {
       first: string;
       second: string;
     };
+    console.log("first:", first);
+    console.log("second:", second);
 
-    console.log(first);
-    console.log(second);
+    // console.log("when i try to use selectedObject.value.first i get error")
+    // console.log(selectedObject.value.first)
 
     // action(first as string, second as string);
   } else {
@@ -102,6 +105,6 @@ export async function deleteProfile() {
 // createNewProfile();
 
 // getProfileList()
-// chooseProfile()
+chooseProfile()
 
-testChooseProfileBeta();
+// testChooseProfileBeta();

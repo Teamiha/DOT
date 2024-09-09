@@ -13,6 +13,7 @@ import { confirmTermination } from "../source/commands/clearAllDenoKv.ts";
 
 const USERNAME = Deno.env.get("USER");
 const PATHTOGITCONFIG = `/Users/${USERNAME}/.ssh/config`;
+// TODO: Заменить на Home
 
 async function displayMenu() {
   const result = await Select.prompt({
