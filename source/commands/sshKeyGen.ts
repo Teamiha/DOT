@@ -27,12 +27,15 @@ export async function createNewSshKey() {
   const name = await getUserInput("Enter a name for the SSH key:");
   const email = await getUserInput("Enter your email:");
   const ssh = await zsh(`ssh-keygen -t ed25519 -C ${email} -f ~/.ssh/${name}`);
-  const connectedUser = "Empty"
+  const connectedUser = "Empty";
 
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
     const sshKeyAdress = { "Adress": `~/.ssh/${name}` };
-    await kv.set(["SSH:", name, "Connected user", connectedUser], ["keyAdress", sshKeyAdress]);
+    await kv.set(["SSH:", name, "Connected user", connectedUser], [
+      "keyAdress",
+      sshKeyAdress,
+    ]);
   } else {
     console.log("Error: SSH key generation failed");
   }

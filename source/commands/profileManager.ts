@@ -10,8 +10,7 @@ export async function getUserInput(prompt: string): Promise<string> {
   throw new Error("No input received");
 }
 
-
-// TODO: Добавить емейл 
+// TODO: Добавить емейл
 
 export async function createNewProfile() {
   const name = await getUserInput("Please enter a name:");
@@ -60,7 +59,7 @@ export async function chooseProfile() {
 
 async function chooseProfileBeta(
   dataArray: Array<Deno.KvEntry<string>>,
-  action: (first: string, second: string) => void,
+  action: (first: string, second: string, third: string) => void,
 ) {
   const data = await dataArray;
   if (data.length > 0) {
@@ -69,19 +68,20 @@ async function chooseProfileBeta(
       message: "Choose user:",
       options: data.map((key) => ({
         name: key.key[1] as string,
-        value: { first: key.key[1], second: key.value[1] },
+        value: { first: key.key[1], second: key.value[1], third: key.key[3] },
       })),
     });
 
     console.log("selectedObject:", selectedObject);
 
-    const { first, second } = selectedObject as unknown as {
+    const { first, second, third } = selectedObject as unknown as {
       first: string;
       second: string;
+      third: string;
     };
     console.log("first:", first);
     console.log("second:", second);
-
+    console.log("third:", third);
     // console.log("when i try to use selectedObject.value.first i get error")
     // console.log(selectedObject.value.first)
 
@@ -105,6 +105,6 @@ export async function deleteProfile() {
 // createNewProfile();
 
 // getProfileList()
-chooseProfile()
+// chooseProfile()
 
 // testChooseProfileBeta();
