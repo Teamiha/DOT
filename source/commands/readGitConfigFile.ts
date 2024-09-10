@@ -15,16 +15,4 @@ export async function readGitConfigFile(filePath: string) {
   }
 }
 
-/*
-await new Command()
-  .name("config-reader")
-  .version("1.0.0")
-  .description("A CLI tool to read Git config files.")
-  .option("-f, --file <file:string>", "The path to the Git config file to read.", {
-    required: true
-  })
-  .action(async (options) => {
-    await readGitConfigFile(options.file);
-  })
-  .parse(Deno.args);
-*/
+

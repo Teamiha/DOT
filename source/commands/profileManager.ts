@@ -10,7 +10,6 @@ export async function getUserInput(prompt: string): Promise<string> {
   throw new Error("No input received");
 }
 
-// TODO: Добавить емейл
 
 export async function createNewProfile() {
   const name = await getUserInput("Please enter a name:");

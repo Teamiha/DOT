@@ -1,6 +1,7 @@
 import { readLines } from "https://deno.land/std/io/mod.ts";
 import { shelly, zsh } from "@vseplet/shelly";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+import { selectSshKeyCore } from "./selectCore.ts";
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
@@ -31,7 +32,7 @@ export async function createNewSshKey() {
 
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
-    const sshKeyAdress = { "Adress": `~/.ssh/${name}` };
+    const sshKeyAdress = `${Deno.env.get("HOME")}/.ssh${name}`;
     await kv.set(["SSH:", name, "Connected user", connectedUser], [
       "keyAdress",
       sshKeyAdress,
@@ -55,21 +56,17 @@ export async function getAllSshKeysList(): Promise<
   return keys;
 }
 
+
 export async function selectSshKey() {
   const sshKeys = await getAllSshKeysList();
-  if (sshKeys.length > 0) {
-    const selectedKey = await Select.prompt({
-      message: "Choose an SSH key:",
-      options: sshKeys.map((key) => ({
-        name: key.key[1] as string,
-        value: key.key[1] as string,
-      })),
-    });
-    console.log(`You selected: ${selectedKey}`);
-  } else {
-    console.log("No SSH keys found.");
-  }
+  await selectSshKeyCore(sshKeys, (name, keyAdress, conection) => {
+    console.log(name, keyAdress, conection);
+    console.log("Conection user: ", conection);
+    console.log("Key adress: ", keyAdress);
+  });
 }
+
+
 
 // createNewSshKey();
 // getAllSshKeysList();

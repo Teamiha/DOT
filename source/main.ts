@@ -11,9 +11,10 @@ import {
 import { selectSshKey } from "../source/commands/sshKeyGen.ts";
 import { confirmTermination } from "../source/commands/clearAllDenoKv.ts";
 
-const USERNAME = Deno.env.get("USER");
-const PATHTOGITCONFIG = `/Users/${USERNAME}/.ssh/config`;
-// TODO: Заменить на Home
+
+// const USERNAME = Deno.env.get("USER");
+const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/config`;
+
 
 async function displayMenu() {
   const result = await Select.prompt({
