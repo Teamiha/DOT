@@ -16,7 +16,7 @@ export async function createNewSshKey() {
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
     const sshKeyAdress = `${Deno.env.get("HOME")}/.ssh/${name}`;
-    await kv.set(["SSH:", name, "Connected user", connectedUser], [
+    await kv.set(["sshKeyName:", name, "Connected user", connectedUser], [
       "keyAdress",
       sshKeyAdress,
     ]);
@@ -30,7 +30,7 @@ export async function getAllSshKeysList(): Promise<
   Array<Deno.KvEntry<string>>
 > {
   const kv = await Deno.openKv();
-  const iter = await kv.list<string>({ prefix: ["SSH:"] });
+  const iter = await kv.list<string>({ prefix: ["sshKeyName:"] });
   const keys = [];
 
   for await (const res of iter) keys.push(res);
@@ -42,9 +42,13 @@ export async function getAllSshKeysList(): Promise<
 
 export async function selectSshKey() {
   const sshKeys = await getAllSshKeysList();
-  await selectSshKeyCore(sshKeys, (name, keyAdress, conection) => {
-    console.log("Name: ", name, "|", "Key adress: ", keyAdress, "|", "Conection user: ", conection);
-  });
+  const result = await selectSshKeyCore(sshKeys);
+
+  const name = result?.[0] ?? "Unknown";
+  const keyAdress = result?.[1] ?? "Unknown";
+  const conection = result?.[2] ?? "Unknown";
+
+  console.log("Name: ", name, "|", "Key adress: ", keyAdress, "|", "Conection user: ", conection);
 }
 
 
