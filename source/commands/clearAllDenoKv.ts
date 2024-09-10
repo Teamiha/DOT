@@ -1,4 +1,4 @@
-import { getUserInput } from "./profileManager.ts";
+import { getUserInput } from "./service.ts";
 
 async function clearEntireDatabase(kv: Deno.Kv): Promise<void> {
   const iterator = kv.list({ prefix: [] });

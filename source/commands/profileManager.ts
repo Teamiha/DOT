@@ -1,15 +1,8 @@
 import { Command } from "@cliffy/command";
 import { readLines } from "https://deno.land/std/io/mod.ts";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
-
-export async function getUserInput(prompt: string): Promise<string> {
-  console.log(prompt);
-  for await (const line of readLines(Deno.stdin)) {
-    return line.trim();
-  }
-  throw new Error("No input received");
-}
-
+import { selectUserCore } from "./selectCore.ts";
+import { getUserInput } from "./service.ts";
 
 export async function createNewProfile() {
   const name = await getUserInput("Please enter a name:");
@@ -40,66 +33,12 @@ export async function getProfileList(): Promise<Array<Deno.KvEntry<string>>> {
 
 export async function chooseProfile() {
   const data = await getProfileList();
-  if (data.length > 0) {
-    const selectedUser = await Select.prompt({
-      message: "Choose user:",
-      options: data.map((key) => ({
-        name: key.key[1] as string,
-        value: { name: key.key[1], ssh: key.value[1] },
-      })),
-    });
-    const { name, ssh } = selectedUser;
-    console.log(`You selected: ${name}`);
-    console.log(`SSH value: ${ssh}`);
-  } else {
-    console.log("No users found.");
-  }
-}
-
-async function chooseProfileBeta(
-  dataArray: Array<Deno.KvEntry<string>>,
-  action: (first: string, second: string, third: string) => void,
-) {
-  const data = await dataArray;
-  if (data.length > 0) {
-    // надо разобраться
-    const selectedObject = await Select.prompt({
-      message: "Choose user:",
-      options: data.map((key) => ({
-        name: key.key[1] as string,
-        value: { first: key.key[1], second: key.value[1], third: key.key[3] },
-      })),
-    });
-
-    console.log("selectedObject:", selectedObject);
-
-    const { first, second, third } = selectedObject as unknown as {
-      first: string;
-      second: string;
-      third: string;
-    };
-    console.log("first:", first);
-    console.log("second:", second);
-    console.log("third:", third);
-    // console.log("when i try to use selectedObject.value.first i get error")
-    // console.log(selectedObject.value.first)
-
-    // action(first as string, second as string);
-  } else {
-    console.log("No data found.");
-  }
-}
-
-async function testChooseProfileBeta() {
-  const data = await getProfileList();
-  chooseProfileBeta(data, (name, ssh) => {
-    console.log(name, ssh);
+  await selectUserCore(data, (name, email, ssh) => {
+    console.log("Name:", name, "|", "Email:", email, "|", "connectedSSH:", ssh);
   });
 }
 
-export async function deleteProfile() {
-  const data = await getProfileList();
-}
+
 
 // createNewProfile();
 

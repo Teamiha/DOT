@@ -2,25 +2,8 @@ import { readLines } from "https://deno.land/std/io/mod.ts";
 import { shelly, zsh } from "@vseplet/shelly";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { selectSshKeyCore } from "./selectCore.ts";
+import { getUserInput } from "./service.ts";
 
-export function hasCyrillicCharacters(str: string): boolean {
-  return /[\u0400-\u04FF]/.test(str);
-}
-
-export async function getUserInput(prompt: string): Promise<string> {
-  console.log(prompt);
-  for await (const line of readLines(Deno.stdin)) {
-    const trimmedLine = line.trim();
-    if (hasCyrillicCharacters(trimmedLine)) {
-      console.log(
-        "Error: Cyrillic characters are not allowed. Please try again.",
-      );
-      continue;
-    }
-    return trimmedLine;
-  }
-  throw new Error("No input received");
-}
 
 export async function createNewSshKey() {
   const kv = await Deno.openKv();
@@ -32,7 +15,7 @@ export async function createNewSshKey() {
 
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
-    const sshKeyAdress = `${Deno.env.get("HOME")}/.ssh${name}`;
+    const sshKeyAdress = `${Deno.env.get("HOME")}/.ssh/${name}`;
     await kv.set(["SSH:", name, "Connected user", connectedUser], [
       "keyAdress",
       sshKeyAdress,
@@ -60,9 +43,7 @@ export async function getAllSshKeysList(): Promise<
 export async function selectSshKey() {
   const sshKeys = await getAllSshKeysList();
   await selectSshKeyCore(sshKeys, (name, keyAdress, conection) => {
-    console.log(name, keyAdress, conection);
-    console.log("Conection user: ", conection);
-    console.log("Key adress: ", keyAdress);
+    console.log("Name: ", name, "|", "Key adress: ", keyAdress, "|", "Conection user: ", conection);
   });
 }
 
