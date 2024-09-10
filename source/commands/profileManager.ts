@@ -11,7 +11,7 @@ export async function createNewProfile() {
   const kv = await Deno.openKv();
   const newSsh = ssh;
 
-  await kv.set(["UserName:", name, "Email:", email], ["connectedSSH", ssh]);
+  await kv.set(["userName:", name, "Email:", email], ["connectedSSH", ssh]);
 
   console.log(`User ${name} saved successfully`);
 
@@ -21,7 +21,7 @@ export async function createNewProfile() {
 export async function getProfileList(): Promise<Array<Deno.KvEntry<string>>> {
   const kv = await Deno.openKv();
 
-  const iter = kv.list<string>({ prefix: ["UserName:"] });
+  const iter = kv.list<string>({ prefix: ["userName:"] });
   const users = [];
 
   for await (const res of iter) users.push(res);

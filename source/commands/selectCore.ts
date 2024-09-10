@@ -35,7 +35,7 @@ export async function selectSshKeyCore(dataArray: Array<Deno.KvEntry<string>>) {
         message: "Select SSH Key",
         options: data.map((key) => ({
           name: key.key[1] as string,
-          value: { keyName: key.key[1], keyAdress: key.value[1], conectionUser: key.key[3] },
+          value: { keyName: key.key[1], keyAdress: key.key[3], conectionUser: key.value[1] },
         })),
       });
   

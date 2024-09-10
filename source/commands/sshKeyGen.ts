@@ -16,10 +16,7 @@ export async function createNewSshKey() {
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
     const sshKeyAdress = `${Deno.env.get("HOME")}/.ssh/${name}`;
-    await kv.set(["sshKeyName:", name, "Connected user", connectedUser], [
-      "keyAdress",
-      sshKeyAdress,
-    ]);
+    await kv.set(["sshKeyName:", name, "keyAdress", sshKeyAdress], ["connectedUser", connectedUser]);
   } else {
     console.log("Error: SSH key generation failed");
   }
@@ -48,7 +45,7 @@ export async function selectSshKey() {
   const keyAdress = result?.[1] ?? "Unknown";
   const conection = result?.[2] ?? "Unknown";
 
-  console.log("Name: ", name, "|", "Key adress: ", keyAdress, "|", "Conection user: ", conection);
+  console.log("Name:", name, "|", "Key adress:", keyAdress, "|", "Conection user:", conection);
 }
 
 
