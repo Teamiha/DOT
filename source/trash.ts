@@ -1,3 +1,5 @@
+/*
+
 async function chooseProfileBeta(
     dataArray: Array<Deno.KvEntry<string>>,
     action: (first: string, second: string, third: string) => void,
@@ -42,3 +44,5 @@ async function chooseProfileBeta(
   export async function deleteProfile() {
     const data = await getProfileList();
   }
+
+*/
