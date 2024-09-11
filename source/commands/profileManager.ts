@@ -23,6 +23,7 @@ export async function getProfileList(): Promise<Array<Deno.KvEntry<string>>> {
 
   const iter = kv.list<string>({ prefix: ["userName:"] });
   const users = [];
+  
 
   for await (const res of iter) users.push(res);
 

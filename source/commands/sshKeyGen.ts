@@ -2,7 +2,7 @@ import { readLines } from "https://deno.land/std/io/mod.ts";
 import { shelly, zsh } from "@vseplet/shelly";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { selectSshKeyCore } from "./selectCore.ts";
-import { getUserInput, disconnectSshKeyAndUser } from "./service.ts";
+import { getUserInput, disconnectSshKeyAndUser, deleteSelectedKvObject } from "./service.ts";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/confirm.ts";
 
 
@@ -59,20 +59,18 @@ export async function deleteSshKey() {
     const keyName = result?.[0] ?? "Unknown";
     const connectedUser = result?.[2] ?? "Unknown";
     const email = result?.[3] ?? "Unknown";
+    const pathToDelete = `${Deno.env.get("HOME")}/.ssh/${keyName}`;
+    const pathToDeletePubKey = `${Deno.env.get("HOME")}/.ssh/${keyName}.pub`;
 
     if(connectedUser !== "Empty") {
       console.log(`This key is connected to a user ${connectedUser}, are you sure you want to delete it?`)
       const confirmed: boolean = await Confirm.prompt("Can you confirm?");
       if(confirmed) {
-        disconnectSshKeyAndUser(connectedUser, keyName, email)
+        await disconnectSshKeyAndUser(connectedUser, keyName, email);
+        await deleteSelectedKvObject("sshKeyName:", keyName);
 
-        const pathToDelete = `${Deno.env.get("HOME")}/.ssh/${keyName}`
-        const pathToDeletePubKey = `${Deno.env.get("HOME")}/.ssh/${keyName}.pub`
-
-        await kv.delete(["sshKeyName:", keyName]);
-
-        console.log(pathToDelete)
-        console.log(pathToDeletePubKey)
+        console.log(pathToDelete);
+        console.log(pathToDeletePubKey);
         // await Deno.remove(pathToDelete)
         // await Deno.remove(pathToDeletePubKey)
         console.log(`Key ${keyName} deleted successfully`)
@@ -80,8 +78,14 @@ export async function deleteSshKey() {
         console.log("Key deletion canceled")
         return
       }
-    }
+    } else {
+      await deleteSelectedKvObject("sshKeyName:", keyName);
+      // await Deno.remove(pathToDelete)
+      // await Deno.remove(pathToDeletePubKey)
+      console.log(`Key ${keyName} deleted successfully`)
+
   }
+}
 
 
 

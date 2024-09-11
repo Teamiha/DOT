@@ -54,5 +54,5 @@ export async function getUserInput(prompt: string): Promise<string> {
     kv.close();
   }
 
-  deleteSelectedKvObject("userName:", "Mikhail")
+
   
