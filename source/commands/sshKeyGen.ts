@@ -2,7 +2,7 @@ import { readLines } from "https://deno.land/std/io/mod.ts";
 import { shelly, zsh } from "@vseplet/shelly";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { selectSshKeyCore } from "./selectCore.ts";
-import { getUserInput } from "./service.ts";
+import { getUserInput, disconnectSshKeyAndUser } from "./service.ts";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/confirm.ts";
 
 
@@ -42,29 +42,34 @@ export async function getAllSshKeysList(): Promise<
 export async function selectSshKey() {
   const sshKeys = await getAllSshKeysList();
   const result = await selectSshKeyCore(sshKeys);
+  if (result !== undefined) {
   const name = result?.[0] ?? "Unknown";
   const conection = result?.[1] ?? "Unknown";
 
-  console.log("Name:", name, "|", "Conection user:", conection);
+    console.log("Name:", name, "|", "Conection user:", conection);
+  } else {
+    console.log("No data found.");
+  }
 }
 
 export async function deleteSshKey() {
     const sshKey = await getAllSshKeysList();
     const result = await selectSshKeyCore(sshKey);
+
     const keyName = result?.[0] ?? "Unknown";
     const connectedUser = result?.[2] ?? "Unknown";
-    console.log(keyName)
+    const email = result?.[3] ?? "Unknown";
 
     if(connectedUser !== "Empty") {
       console.log(`This key is connected to a user ${connectedUser}, are you sure you want to delete it?`)
       const confirmed: boolean = await Confirm.prompt("Can you confirm?");
       if(confirmed) {
-
-
-
+        disconnectSshKeyAndUser(connectedUser, keyName, email)
 
         const pathToDelete = `${Deno.env.get("HOME")}/.ssh/${keyName}`
         const pathToDeletePubKey = `${Deno.env.get("HOME")}/.ssh/${keyName}.pub`
+
+        await kv.delete(["sshKeyName:", keyName]);
 
         console.log(pathToDelete)
         console.log(pathToDeletePubKey)
@@ -76,9 +81,6 @@ export async function deleteSshKey() {
         return
       }
     }
-
-    
-
   }
 
 

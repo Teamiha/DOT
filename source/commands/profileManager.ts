@@ -34,13 +34,16 @@ export async function getProfileList(): Promise<Array<Deno.KvEntry<string>>> {
 export async function chooseProfile() {
   const data = await getProfileList();
   const result = await selectUserCore(data);
+  if (result !== undefined) {
 
   const name = result?.[0] ?? "Unknown";
   const email = result?.[2] ?? "Unknown";
   const connectedSSH = result?.[1] ?? "Unknown";
 
-  console.log("Name:", name, "|", "Email:", email, "|", "connectedSSH:", connectedSSH);
-  
+    console.log("Name:", name, "|", "Email:", email, "|", "connectedSSH:", connectedSSH);
+  } else {
+    console.log("No data found.");
+  }
 }
 
 

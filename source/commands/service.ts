@@ -34,13 +34,25 @@ export async function getUserInput(prompt: string): Promise<string> {
     }
   } 
 
-  export async function disconnectSshKeyAndUser(keyName: string, username: string) {
+  export async function disconnectSshKeyAndUser(username: string, keyName: string, email: string) {
+
     const kv = await Deno.openKv();
-    const user = await kv.get(["userName:", username])
-    console.log(user)
+    const user = await kv.get(["userName:", username])    
+    const key = await kv.get(["sshKeyName:", keyName])
+    
+    await kv.set(["userName:", username], ["connectedSSH", "Empty", "Email:", email]);
+    await kv.set(["sshKeyName:", keyName], ["connectedUser", "Empty"]);
+  
+    console.log(`User ${username} disconnected to SSH key ${keyName}`);
+
+    kv.close();
   }
   
-  const testName = "Svetlov"
-//   const testEmail = "ssss@rkdjg"
-//   const cleanedInput: string = testName.replace(/["]+/g, '');
-//   disconnectSshKeyAndUser("test", testName)
+  export async function deleteSelectedKvObject(key: string, value: string) {
+    const kv = await Deno.openKv();
+    await kv.delete([key, value]);
+    kv.close();
+  }
+
+  deleteSelectedKvObject("userName:", "Mikhail")
+  

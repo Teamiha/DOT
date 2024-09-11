@@ -23,7 +23,7 @@ export async function selectUserCore(dataArray: Array<Deno.KvEntry<string>>) {
       return [userName, sshKey, email];
   
     } else {
-      console.log("No data found.");
+      return undefined
     }
   }
 
@@ -47,7 +47,7 @@ export async function selectSshKeyCore(dataArray: Array<Deno.KvEntry<string>>) {
       return [keyName, conectionUser];
   
     } else {
-      console.log("No data found.");
+      return undefined
     }
   }
 

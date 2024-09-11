@@ -23,23 +23,23 @@ export async function connectUserToSsh() {
   const name = userListResult?.[0] ?? "Unknown";
   const email = userListResult?.[2] ?? "Unknown";
   const connectedSSH = userListResult?.[1] ?? "Unknown";
-  console.log("User: ", name, "|", "Email: ", email, "|", "Connected SSH: ", connectedSSH);
+  // console.log("User: ", name, "|", "Email: ", email, "|", "Connected SSH: ", connectedSSH);
 
   const sshListResult = await selectSshKeyCore(sshList)
 
   const nameKey = sshListResult?.[0] ?? "Unknown";
   const conectionUser = sshListResult?.[1] ?? "Unknown";
 
-  console.log("SSH key: ", nameKey, "|", "Connection user: ", conectionUser);
+  // console.log("SSH key: ", nameKey, "|", "Connection user: ", conectionUser);
 
-    // console.log(`SSH key: ${nameKey}`);
-    // console.log(`You selected: ${name}`);
-    // console.log(`You selected ssh key: ${nameKey}`);
+    console.log(`SSH key: ${nameKey}`);
+    console.log(`You selected: ${name}`);
+    console.log(`You selected ssh key: ${nameKey}`);
 
-    // await keyRecording(name, nameKey, email);
+    await keyRecording(name, nameKey, email);
   
    
   
 }
 
-  connectUserToSsh();
+  // connectUserToSsh();
