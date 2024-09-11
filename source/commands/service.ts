@@ -33,3 +33,14 @@ export async function getUserInput(prompt: string): Promise<string> {
       console.error(`An error occurred: ${error.message}`);
     }
   } 
+
+  export async function disconnectSshKeyAndUser(keyName: string, username: string, email: string) {
+    const kv = await Deno.openKv();
+    const user = await kv.get(["userName:", username, "Email:", email])
+    console.log(user)
+  }
+  
+  const testName = "Mikhail"
+  const testEmail = "ssss@rkdjg"
+//   const cleanedInput: string = testName.replace(/["]+/g, '');
+  disconnectSshKeyAndUser("test", testName, testEmail)
