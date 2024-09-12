@@ -1,4 +1,3 @@
-
 /*
 
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
@@ -18,9 +17,9 @@ async function chooseProfileBeta(
           value: { first: key.key[1], second: key.value[1], third: key.key[3] },
         })),
       });
-  
+
       console.log("selectedObject:", selectedObject);
-  
+
       const { first, second, third } = selectedObject as unknown as {
         first: string;
         second: string;
@@ -32,24 +31,24 @@ async function chooseProfileBeta(
 
       console.log("when i try to use selectedObject.value.first i get error")
       console.log(selectedObject.value.first)
-  
+
       action(first as string, second as string, third as string);
     } else {
       console.log("No data found.");
     }
   }
-  
+
   async function testChooseProfileBeta() {
     const data = await getProfileList();
     chooseProfileBeta(data, (name, ssh) => {
       console.log(name, ssh);
     });
   }
-  
+
   export async function deleteProfile() {
     const data = await getProfileList();
   }
 
 
-  
+
 */

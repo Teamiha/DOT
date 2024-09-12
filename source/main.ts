@@ -4,17 +4,17 @@ import { readGitConfigFile } from "./commands/service.ts";
 import {
   chooseProfile,
   createNewProfile,
-} 
-from "../source/commands/profileManager.ts";
-import { selectSshKey, createNewSshKey } from "../source/commands/sshKeyGen.ts";
+} from "../source/commands/profileManager.ts";
+import {
+  createNewSshKey,
+  deleteSshKey,
+  selectSshKey,
+} from "../source/commands/sshKeyGen.ts";
 import { confirmTermination } from "../source/commands/clearAllDenoKv.ts";
 import { connectUserToSsh } from "../source/commands/connectUserAndSshKey.ts";
 
-
-
 // const USERNAME = Deno.env.get("USER");
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/config`;
-
 
 async function displayMenu() {
   const result = await Select.prompt({
@@ -26,6 +26,7 @@ async function displayMenu() {
       { name: "List all Users", value: "4" },
       { name: "List all SSH keys", value: "5" },
       { name: "Connect User to SSH key", value: "6" },
+      { name: "Delete SSH key", value: "7" },
       { name: "Terminate all DataBase", value: "9" },
       { name: "Exit", value: "10" },
     ],
@@ -50,6 +51,9 @@ async function displayMenu() {
     case "6":
       await connectUserToSsh();
       break;
+    case "7":
+      await deleteSshKey();
+      break;
     case "9":
       await confirmTermination();
       break;
@@ -64,7 +68,7 @@ async function displayMenu() {
 async function main() {
   while (true) {
     await displayMenu();
-    console.log("\n");
+    console.log("----------------------------------------");
   }
 }
 

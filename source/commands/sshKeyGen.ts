@@ -2,9 +2,12 @@ import { readLines } from "https://deno.land/std/io/mod.ts";
 import { shelly, zsh } from "@vseplet/shelly";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { selectSshKeyCore } from "./selectCore.ts";
-import { getUserInput, disconnectSshKeyAndUser, deleteSelectedKvObject } from "./service.ts";
+import {
+  deleteSelectedKvObject,
+  disconnectSshKeyAndUser,
+  getUserInput,
+} from "./service.ts";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/confirm.ts";
-
 
 export async function createNewSshKey() {
   const kv = await Deno.openKv();
@@ -13,7 +16,6 @@ export async function createNewSshKey() {
   const email = await getUserInput("Enter your email:");
   const ssh = await zsh(`ssh-keygen -t ed25519 -C ${email} -f ~/.ssh/${name}`);
   const connectedUser = "Empty";
-
 
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
@@ -38,13 +40,12 @@ export async function getAllSshKeysList(): Promise<
   return keys;
 }
 
-
 export async function selectSshKey() {
   const sshKeys = await getAllSshKeysList();
   const result = await selectSshKeyCore(sshKeys);
   if (result !== undefined) {
-  const name = result?.[0] ?? "Unknown";
-  const conection = result?.[1] ?? "Unknown";
+    const name = result?.[0] ?? "Unknown";
+    const conection = result?.[1] ?? "Unknown";
 
     console.log("Name:", name, "|", "Conection user:", conection);
   } else {
@@ -53,7 +54,11 @@ export async function selectSshKey() {
 }
 
 export async function deleteSshKey() {
-    const sshKey = await getAllSshKeysList();
+  const sshKey = await getAllSshKeysList();
+  if (sshKey.length === 0) {
+    console.log("No data found.");
+    return;
+  } else {
     const result = await selectSshKeyCore(sshKey);
 
     const keyName = result?.[0] ?? "Unknown";
@@ -62,33 +67,32 @@ export async function deleteSshKey() {
     const pathToDelete = `${Deno.env.get("HOME")}/.ssh/${keyName}`;
     const pathToDeletePubKey = `${Deno.env.get("HOME")}/.ssh/${keyName}.pub`;
 
-    if(connectedUser !== "Empty") {
-      console.log(`This key is connected to a user ${connectedUser}, are you sure you want to delete it?`)
+    if (connectedUser !== "Empty") {
+      console.log(
+        `This key is connected to a user ${connectedUser}, are you sure you want to delete it?`,
+      );
       const confirmed: boolean = await Confirm.prompt("Can you confirm?");
-      if(confirmed) {
-        await disconnectSshKeyAndUser(connectedUser, keyName, email);
+      if (confirmed) {
+        await disconnectSshKeyAndUser(connectedUser, keyName);
         await deleteSelectedKvObject("sshKeyName:", keyName);
 
         console.log(pathToDelete);
         console.log(pathToDeletePubKey);
-        // await Deno.remove(pathToDelete)
-        // await Deno.remove(pathToDeletePubKey)
-        console.log(`Key ${keyName} deleted successfully`)
+        await Deno.remove(pathToDelete);
+        await Deno.remove(pathToDeletePubKey);
+        console.log(`Key ${keyName} deleted successfully`);
       } else {
-        console.log("Key deletion canceled")
-        return
+        console.log("Key deletion canceled");
+        return;
       }
     } else {
       await deleteSelectedKvObject("sshKeyName:", keyName);
-      // await Deno.remove(pathToDelete)
-      // await Deno.remove(pathToDeletePubKey)
-      console.log(`Key ${keyName} deleted successfully`)
-
+      await Deno.remove(pathToDelete);
+      await Deno.remove(pathToDeletePubKey);
+      console.log(`Key ${keyName} deleted successfully`);
+    }
   }
 }
-
-
-
 
 // createNewSshKey();
 // getAllSshKeysList();
