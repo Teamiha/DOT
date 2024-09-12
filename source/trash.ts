@@ -1,4 +1,8 @@
+
 /*
+
+import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+import { getProfileList } from "./commands/profileManager.ts";
 
 async function chooseProfileBeta(
     dataArray: Array<Deno.KvEntry<string>>,
@@ -25,10 +29,11 @@ async function chooseProfileBeta(
       console.log("first:", first);
       console.log("second:", second);
       console.log("third:", third);
-      // console.log("when i try to use selectedObject.value.first i get error")
-      // console.log(selectedObject.value.first)
+
+      console.log("when i try to use selectedObject.value.first i get error")
+      console.log(selectedObject.value.first)
   
-      // action(first as string, second as string);
+      action(first as string, second as string, third as string);
     } else {
       console.log("No data found.");
     }
@@ -45,4 +50,6 @@ async function chooseProfileBeta(
     const data = await getProfileList();
   }
 
+
+  
 */

@@ -19,13 +19,21 @@ export async function connectUserToSsh() {
   const sshList = await getAllSshKeysList();
 
   const userListResult = await selectUserCore(userList)
+  if (userListResult === undefined) {
+    console.log("User list is empty")
+    return
+  } else {
 
   const name = userListResult?.[0] ?? "Unknown";
   const email = userListResult?.[2] ?? "Unknown";
   const connectedSSH = userListResult?.[1] ?? "Unknown";
-  // console.log("User: ", name, "|", "Email: ", email, "|", "Connected SSH: ", connectedSSH);
-
+}
+  
   const sshListResult = await selectSshKeyCore(sshList)
+  if (sshListResult === undefined) {
+    console.log("SSH key list is empty")
+    return
+  } else {
 
   const nameKey = sshListResult?.[0] ?? "Unknown";
   const conectionUser = sshListResult?.[1] ?? "Unknown";
@@ -38,8 +46,7 @@ export async function connectUserToSsh() {
 
     await keyRecording(name, nameKey, email);
   
-   
-  
+  }
 }
 
-  // connectUserToSsh();
+

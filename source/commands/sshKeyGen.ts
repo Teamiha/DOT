@@ -57,8 +57,8 @@ export async function deleteSshKey() {
     const result = await selectSshKeyCore(sshKey);
 
     const keyName = result?.[0] ?? "Unknown";
-    const connectedUser = result?.[2] ?? "Unknown";
-    const email = result?.[3] ?? "Unknown";
+    const connectedUser = result?.[1] ?? "Unknown";
+    // const email = result?.[2] ?? "Unknown";
     const pathToDelete = `${Deno.env.get("HOME")}/.ssh/${keyName}`;
     const pathToDeletePubKey = `${Deno.env.get("HOME")}/.ssh/${keyName}.pub`;
 

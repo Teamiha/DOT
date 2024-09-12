@@ -8,6 +8,7 @@ import {
 from "../source/commands/profileManager.ts";
 import { selectSshKey, createNewSshKey } from "../source/commands/sshKeyGen.ts";
 import { confirmTermination } from "../source/commands/clearAllDenoKv.ts";
+import { connectUserToSsh } from "../source/commands/connectUserAndSshKey.ts";
 
 
 
@@ -24,6 +25,7 @@ async function displayMenu() {
       { name: "Create new SSH key", value: "3" },
       { name: "List all Users", value: "4" },
       { name: "List all SSH keys", value: "5" },
+      { name: "Connect User to SSH key", value: "6" },
       { name: "Terminate all DataBase", value: "9" },
       { name: "Exit", value: "10" },
     ],
@@ -44,6 +46,9 @@ async function displayMenu() {
       break;
     case "5":
       await selectSshKey();
+      break;
+    case "6":
+      await connectUserToSsh();
       break;
     case "9":
       await confirmTermination();
