@@ -1,5 +1,9 @@
 import { selectUserCore } from "./selectCore.ts";
-import { getUserInput, deleteSelectedKvObject, disconnectSshKeyAndUser } from "./service.ts";
+import {
+  deleteSelectedKvObject,
+  disconnectSshKeyAndUser,
+  getUserInput,
+} from "./service.ts";
 
 export async function createNewProfile() {
   const name = await getUserInput("Please enter a name:");
@@ -55,7 +59,7 @@ export async function deleteProfile() {
   const result = await selectUserCore(data);
   const name = result?.[0] ?? "Unknown";
   const connectedSSH = result?.[1] ?? "Unknown";
-  
+
   if (result !== undefined) {
     if (connectedSSH !== "Empty") {
       await disconnectSshKeyAndUser(name, connectedSSH);
@@ -68,8 +72,7 @@ export async function deleteProfile() {
   } else {
     console.log("No data found.");
   }
-    }
-
+}
 
 // createNewProfile();
 

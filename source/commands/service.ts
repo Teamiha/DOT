@@ -1,6 +1,5 @@
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/input.ts";
 
-
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
 }
@@ -21,20 +20,22 @@ export function hasCyrillicCharacters(str: string): boolean {
 // }
 
 export async function getUserInput(prompt: string): Promise<string> {
-    // console.log(prompt);
-    const line = await Input.prompt(prompt)
-      const trimmedLine = line.trim();
-      if (hasCyrillicCharacters(trimmedLine)) {
-        console.log("Error: Cyrillic characters are not allowed. Please try again.");
-        return getUserInput(prompt);
-      } else {
-        if (trimmedLine === "") {
-          console.log("Error: Input cannot be empty. Please try again.");
-          return getUserInput(prompt);
-        } else {
-          return trimmedLine;
-        }
+  // console.log(prompt);
+  const line = await Input.prompt(prompt);
+  const trimmedLine = line.trim();
+  if (hasCyrillicCharacters(trimmedLine)) {
+    console.log(
+      "Error: Cyrillic characters are not allowed. Please try again.",
+    );
+    return getUserInput(prompt);
+  } else {
+    if (trimmedLine === "") {
+      console.log("Error: Input cannot be empty. Please try again.");
+      return getUserInput(prompt);
+    } else {
+      return trimmedLine;
     }
+  }
 }
 
 export async function readGitConfigFile(filePath: string) {

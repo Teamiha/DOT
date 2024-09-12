@@ -54,7 +54,6 @@ export async function deleteSshKey() {
   const sshKey = await getAllSshKeysList();
   if (sshKey.length === 0) {
     console.log("No data found.");
-    return;
   } else {
     const result = await selectSshKeyCore(sshKey);
 
@@ -76,7 +75,6 @@ export async function deleteSshKey() {
         console.log(`Key ${keyName} deleted successfully`);
       } else {
         console.log("Key deletion canceled");
-        return;
       }
     } else {
       await deleteSelectedKvObject("sshKeyName:", keyName);
