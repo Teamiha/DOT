@@ -58,7 +58,6 @@ export async function disconnectSshKeyAndUser(
 ) {
   const kv = await Deno.openKv();
   const user = await kv.get<string>(["userName:", username]);
-  // const key = await kv.get(["sshKeyName:", keyName])
 
   const email = user.value?.[3] ?? "Unknown";
 

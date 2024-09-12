@@ -4,6 +4,7 @@ import { readGitConfigFile } from "./commands/service.ts";
 import {
   chooseProfile,
   createNewProfile,
+  deleteProfile,
 } from "../source/commands/profileManager.ts";
 import {
   createNewSshKey,
@@ -27,6 +28,7 @@ async function displayMenu() {
       { name: "List all SSH keys", value: "5" },
       { name: "Connect User to SSH key", value: "6" },
       { name: "Delete SSH key", value: "7" },
+      { name: "Delete User", value: "8" },
       { name: "Terminate all DataBase", value: "9" },
       { name: "Exit", value: "10" },
     ],
@@ -53,6 +55,9 @@ async function displayMenu() {
       break;
     case "7":
       await deleteSshKey();
+      break;
+    case "8":
+      await deleteProfile();
       break;
     case "9":
       await confirmTermination();
