@@ -1,6 +1,3 @@
-import { Command } from "@cliffy/command";
-import { readLines } from "https://deno.land/std/io/mod.ts";
-import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { selectUserCore } from "./selectCore.ts";
 import { getUserInput } from "./service.ts";
 
@@ -9,7 +6,6 @@ export async function createNewProfile() {
   const email = await getUserInput("Please enter a email:");
   const ssh = "Empty";
   const kv = await Deno.openKv();
-  const newSsh = ssh;
 
   await kv.set(["userName:", name], ["connectedSSH", ssh, "Email:", email]);
 

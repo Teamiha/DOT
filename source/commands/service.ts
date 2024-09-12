@@ -1,22 +1,40 @@
-import { readLines } from "https://deno.land/std/io/mod.ts";
+import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/input.ts";
+
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
 }
 
+// export async function getUserInput(prompt: string): Promise<string> {
+//   console.log(prompt);
+//   for await (const line of readLines(Deno.stdin)) {
+//     const trimmedLine = line.trim();
+//     if (hasCyrillicCharacters(trimmedLine)) {
+//       console.log(
+//         "Error: Cyrillic characters are not allowed. Please try again.",
+//       );
+//       continue;
+//     }
+//     return trimmedLine;
+//   }
+//   throw new Error("No input received");
+// }
+
 export async function getUserInput(prompt: string): Promise<string> {
-  console.log(prompt);
-  for await (const line of readLines(Deno.stdin)) {
-    const trimmedLine = line.trim();
-    if (hasCyrillicCharacters(trimmedLine)) {
-      console.log(
-        "Error: Cyrillic characters are not allowed. Please try again.",
-      );
-      continue;
+    // console.log(prompt);
+    const line = await Input.prompt(prompt)
+      const trimmedLine = line.trim();
+      if (hasCyrillicCharacters(trimmedLine)) {
+        console.log("Error: Cyrillic characters are not allowed. Please try again.");
+        return getUserInput(prompt);
+      } else {
+        if (trimmedLine === "") {
+          console.log("Error: Input cannot be empty. Please try again.");
+          return getUserInput(prompt);
+        } else {
+          return trimmedLine;
+        }
     }
-    return trimmedLine;
-  }
-  throw new Error("No input received");
 }
 
 export async function readGitConfigFile(filePath: string) {

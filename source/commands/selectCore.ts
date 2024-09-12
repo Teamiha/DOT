@@ -1,6 +1,5 @@
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
-import { getProfileList } from "./profileManager.ts";
-import { getAllSshKeysList } from "./sshKeyGen.ts";
+
 
 export async function selectUserCore(dataArray: Array<Deno.KvEntry<string>>) {
   const data = await dataArray;

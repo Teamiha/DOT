@@ -1,6 +1,4 @@
-import { readLines } from "https://deno.land/std/io/mod.ts";
-import { shelly, zsh } from "@vseplet/shelly";
-import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+import { zsh } from "@vseplet/shelly";
 import { selectSshKeyCore } from "./selectCore.ts";
 import {
   deleteSelectedKvObject,
@@ -19,7 +17,6 @@ export async function createNewSshKey() {
 
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
-    const sshKeyAdress = `${Deno.env.get("HOME")}/.ssh/${name}`;
     await kv.set(["sshKeyName:", name], ["connectedUser", connectedUser]);
   } else {
     console.log("Error: SSH key generation failed");
@@ -63,7 +60,6 @@ export async function deleteSshKey() {
 
     const keyName = result?.[0] ?? "Unknown";
     const connectedUser = result?.[1] ?? "Unknown";
-    // const email = result?.[2] ?? "Unknown";
     const pathToDelete = `${Deno.env.get("HOME")}/.ssh/${keyName}`;
     const pathToDeletePubKey = `${Deno.env.get("HOME")}/.ssh/${keyName}.pub`;
 
@@ -75,9 +71,6 @@ export async function deleteSshKey() {
       if (confirmed) {
         await disconnectSshKeyAndUser(connectedUser, keyName);
         await deleteSelectedKvObject("sshKeyName:", keyName);
-
-        console.log(pathToDelete);
-        console.log(pathToDeletePubKey);
         await Deno.remove(pathToDelete);
         await Deno.remove(pathToDeletePubKey);
         console.log(`Key ${keyName} deleted successfully`);

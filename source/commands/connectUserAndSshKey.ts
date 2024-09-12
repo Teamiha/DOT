@@ -1,4 +1,3 @@
-import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { getProfileList } from "./profileManager.ts";
 import { getAllSshKeysList } from "./sshKeyGen.ts";
 import { selectSshKeyCore, selectUserCore } from "./selectCore.ts";
@@ -26,12 +25,8 @@ export async function connectUserToSsh() {
   } else {
     const name = userListResult?.[0] ?? "Unknown";
     const email = userListResult?.[2] ?? "Unknown";
-    const connectedSSH = userListResult?.[1] ?? "Unknown";
 
     const nameKey = sshListResult?.[0] ?? "Unknown";
-    const conectionUser = sshListResult?.[1] ?? "Unknown";
-
-    // console.log("SSH key: ", nameKey, "|", "Connection user: ", conectionUser);
 
     console.log(`SSH key: ${nameKey}`);
     console.log(`You selected: ${name}`);
