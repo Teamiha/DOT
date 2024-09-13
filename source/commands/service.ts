@@ -38,20 +38,44 @@ export async function getUserInput(prompt: string): Promise<string> {
   }
 }
 
-export async function readGitConfigFile(filePath: string) {
-  try {
-    const content = await Deno.readTextFile(filePath);
-    const lines = content.split("\n");
+// export async function readGitConfigFile(filePath: string) {
+//   try {
+//     const content = await Deno.readTextFile(filePath);
+//     const lines = content.split("\n");
 
-    for (const line of lines) {
-      const trimmedLine = line.trim();
-      const [key, value] = trimmedLine.split(/\s+/);
-      console.log(`${key} - ${value}`);
+//     for (const line of lines) {
+//       const trimmedLine = line.trim();
+//       const [key, value] = trimmedLine.split(/\s+/);
+//       console.log(`${key} - ${value}`);
+//     }
+//   } catch (error) {
+//     console.error(`An error occurred: ${error.message}`);
+//   }
+// }
+
+export async function readGitConfigFile(filePath: string) {
+     
+    try {
+      const content = await Deno.readTextFile(filePath);
+      const lines = content.split("\n");
+      let rezult = [];
+      for (const line of lines) {
+        
+        const trimmedLine = line.trim();
+
+        if (trimmedLine) {
+            const [key, value] = trimmedLine.split(/\s+/);
+            rezult.push({ key, value})
+            // console.log(`${key} - ${value}`);
+        
+        }
+      }
+      return rezult
+    } catch (error) {
+      console.error(`An error occurred: ${error.message}`);
     }
-  } catch (error) {
-    console.error(`An error occurred: ${error.message}`);
+    
   }
-}
 
 export async function disconnectSshKeyAndUser(
   username: string,
