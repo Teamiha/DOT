@@ -4,6 +4,7 @@ import {
   disconnectSshKeyAndUser,
   getUserInput,
 } from "./service.ts";
+import { checkIsThisUserActive } from "./activateProfile.ts";
 
 export async function createNewProfile() {
   const name = await getUserInput("Please enter a name:");
@@ -58,7 +59,13 @@ export async function deleteProfile() {
   const data = await getProfileList();
   const result = await selectUserCore(data);
   const name = result?.[0] ?? "Unknown";
+  console.log(name)
   const connectedSSH = result?.[1] ?? "Unknown";
+
+  if (await checkIsThisUserActive(name)) {
+    console.log("You can't delete active user. Deactivate profile first.");
+    return;
+  } 
 
   if (result !== undefined) {
     if (connectedSSH !== "Empty") {

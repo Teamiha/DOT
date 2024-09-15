@@ -89,7 +89,26 @@ export async function showActiveProfileStatus() {
   }
 }
 
+export async function deactivateProfile() {
+  
+}
 
+export async function checkIsThisUserActive(username: string) {
+  const kv = await Deno.openKv();
+  const activeProfile = await kv.get(["activeProfile"])
+  const activeProfileName = activeProfile?.value ?? "Empty"
+  kv.close();
+
+  if (`${activeProfileName}` === username) {
+    console.log("true")
+    return true;
+  } else {
+    console.log("false")
+    return false;
+  }
+}
 
 // activateProfile();
-showActiveProfileStatus();
+// showActiveProfileStatus();
+// checkIsThisUserActive("Jegnum");
+
