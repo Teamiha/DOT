@@ -6,6 +6,7 @@ import {
   getUserInput,
 } from "./service.ts";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/confirm.ts";
+import { checkIsThisActive } from "./activateProfile.ts";
 
 export async function createNewSshKey() {
   const kv = await Deno.openKv();
@@ -61,6 +62,11 @@ export async function deleteSshKey() {
     const connectedUser = result?.[1] ?? "Unknown";
     const pathToDelete = `${Deno.env.get("HOME")}/.ssh/${keyName}`;
     const pathToDeletePubKey = `${Deno.env.get("HOME")}/.ssh/${keyName}.pub`;
+
+    if (await checkIsThisActive(keyName)) {
+      console.log("You can't delete active key. Deactivate profile first.");
+      return;
+    }
 
     if (connectedUser !== "Empty") {
       console.log(

@@ -31,10 +31,10 @@ async function changeSSHConfig(key: string, newValue: string) {
     const entry = rawData.find((entry) => entry.key === key);
     if (entry) {
       entry.value = newValue;
-      return { success: true, message: `Key "${key}" changed to ${newValue}` };
+      return { success: true };
     } else {
       console.error(`Key "${key}" not found in the config.`);
-      return { success: false, message: `Key "${key}" not found in the config.` };
+      return { success: false };
     }
   } else {
     console.log("Error getting config");
@@ -93,17 +93,17 @@ export async function deactivateProfile() {
   
 }
 
-export async function checkIsThisUserActive(username: string) {
+export async function checkIsThisActive(usernameOrSSHKey: string) {
   const kv = await Deno.openKv();
   const activeProfile = await kv.get(["activeProfile"])
+  const activeSSHKey = await kv.get(["activeSSHKey"])
   const activeProfileName = activeProfile?.value ?? "Empty"
+  const activeSSHKeyName = activeSSHKey?.value ?? "Empty"
   kv.close();
 
-  if (`${activeProfileName}` === username) {
-    console.log("true")
+  if (`${activeProfileName}` === usernameOrSSHKey || `${activeSSHKeyName}` === usernameOrSSHKey) {
     return true;
   } else {
-    console.log("false")
     return false;
   }
 }
