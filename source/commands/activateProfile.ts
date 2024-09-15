@@ -15,13 +15,11 @@ async function setActiveProfile(username: string, sshKey: string) {
     kv.close();
 }
 
-function stringifySSHConfig(
-  config: { key: string; value: string }[] | undefined,
-): string {
+function stringifySSHConfig(config: { key: string; value: string }[] | undefined,): string {
   if (config === undefined) {
     return "";
   }
-  return config.map((entry) => `${entry.key} ${entry.value}`).join("\n");
+  return config.map(entry => `${entry.key} ${entry.value}`).join("\n");
 }
 
 async function changeSSHConfig(key: string, newValue: string) {
@@ -31,6 +29,8 @@ async function changeSSHConfig(key: string, newValue: string) {
     const entry = rawData.find((entry) => entry.key === key);
     if (entry) {
       entry.value = newValue;
+      const convertResult = stringifySSHConfig(rawData);
+      await Deno.writeTextFile(PATHTOGITCONFIG, convertResult);
       return { success: true };
     } else {
       console.error(`Key "${key}" not found in the config.`);
@@ -40,9 +40,10 @@ async function changeSSHConfig(key: string, newValue: string) {
     console.log("Error getting config");
   }
 
-  const convertResult = stringifySSHConfig(rawData);
+  
+//   console.log(convertResult)
 
-  await Deno.writeTextFile(PATHTOGITCONFIG, convertResult);
+  
 
 //   console.log(`Value ${key} successfully changed to ${newValue}`);
 }
