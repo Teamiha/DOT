@@ -22,6 +22,8 @@ export async function selectUserCore(dataArray: Array<Deno.KvEntry<string>>) {
       email: string;
     };
 
+    // Подумать над возможностью обращаться не через номер массива, а по именам
+
     return [userName, sshKey, email];
   } else {
     return undefined;
