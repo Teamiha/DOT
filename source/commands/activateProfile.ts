@@ -1,42 +1,39 @@
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { readGitConfigFile } from "./service.ts";
 
-// function parseSSHConfig(content: string): Record<string, string> {
-//     const config: Record<string, string> = {};
-//     const lines = content.split('\n');
-//     let currentHost = '';
-  
-//     for (const line of lines) {
-//       const trimmedLine = line.trim();
-//       if (trimmedLine.startsWith('Host ')) {
-//         currentHost = trimmedLine.split(' ')[1];
-//         config[currentHost] = {};
-//       } else if (trimmedLine && currentHost) {
-//         const [key, ...valueParts] = trimmedLine.split(' ');
-//         const value = valueParts.join(' ');
-//         config[currentHost][key] = value;
-//       }
-//     }
-  
-//   return config;
-// }
+// ЗАМЕНИТЬ!!!!
+const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/testconfig`;
 
-async function testing() {
-    
-const rez = await readGitConfigFile(Deno.env.get("HOME") + "/.ssh/testconfig");
-if (rez !== undefined) {
-for (const item of rez) {
-    console.log(`${item.key} ${item.value}`);
+function stringifySSHConfig(
+  config: { key: string; value: string }[] | undefined,
+): string {
+  if (config === undefined) {
+    return "";
   }
+  return config.map((entry) => `${entry.key} ${entry.value}`).join("\n");
+}
 
-  const hostItem = rez.find(item => item.key === "Host");
-  if (hostItem) {
-    console.log(hostItem.value);
+async function changeSSHConfig(key: string, newValue: string) {
+  const rawData = await readGitConfigFile(PATHTOGITCONFIG);
+
+  if (rawData !== undefined) {
+  const entry = rawData.find(entry => entry.key === key);
+  if (entry) {
+    entry.value = newValue;
+  } else {
+    console.error(`Key "${key}" not found in the config.`);
   }
 } else {
-   console.log("Error getting config")
+    console.log("Error getting config");
 }
+
+  const convertResult = stringifySSHConfig(rawData);
+
+  await Deno.writeTextFile(PATHTOGITCONFIG, convertResult)
+
+  console.log(`Value ${key} successfully changed to ${newValue}`);
+  
 
 }
 
-testing()
+// changeSSHConfig("Host", "test");

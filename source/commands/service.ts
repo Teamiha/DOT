@@ -54,28 +54,24 @@ export async function getUserInput(prompt: string): Promise<string> {
 // }
 
 export async function readGitConfigFile(filePath: string) {
-     
-    try {
-      const content = await Deno.readTextFile(filePath);
-      const lines = content.split("\n");
-      let rezult = [];
-      for (const line of lines) {
-        
-        const trimmedLine = line.trim();
+  try {
+    const content = await Deno.readTextFile(filePath);
+    const lines = content.split("\n");
+    const rezult = [];
+    for (const line of lines) {
+      const trimmedLine = line.trim();
 
-        if (trimmedLine) {
-            const [key, value] = trimmedLine.split(/\s+/);
-            rezult.push({ key, value})
-            // console.log(`${key} - ${value}`);
-        
-        }
+      if (trimmedLine) {
+        const [key, value] = trimmedLine.split(/\s+/);
+        rezult.push({ key, value });
+        // console.log(`${key} - ${value}`);
       }
-      return rezult
-    } catch (error) {
-      console.error(`An error occurred: ${error.message}`);
     }
-    
+    return rezult;
+  } catch (error) {
+    console.error(`An error occurred: ${error.message}`);
   }
+}
 
 export async function disconnectSshKeyAndUser(
   username: string,
