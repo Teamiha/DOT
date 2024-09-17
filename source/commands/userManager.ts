@@ -52,7 +52,7 @@ export async function chooseUser(showDataInConsole: boolean) {
         connectedSSH,
       );
     } else {
-      return [name, connectedSSH, email]
+      return [name, connectedSSH, email];
     }
   } else {
     console.log("No data found.");

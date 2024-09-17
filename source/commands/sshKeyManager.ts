@@ -45,9 +45,9 @@ export async function choseSshKey(showDataInConsole: boolean) {
     const name = result?.[0] ?? "Unknown";
     const conection = result?.[1] ?? "Unknown";
     if (showDataInConsole === true) {
-    console.log("Name:", name, "|", "Conection user:", conection);
+      console.log("Name:", name, "|", "Conection user:", conection);
     } else {
-      return [name, conection]
+      return [name, conection];
     }
   } else {
     console.log("No data found.");

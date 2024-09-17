@@ -67,28 +67,27 @@ export async function disconnectSshKeyAndUser(
 }
 
 export async function manualDisconnectSshKeyAndUser() {
-    const user = await chooseUser(false);
-    const ssh = await choseSshKey(false);
+  const user = await chooseUser(false);
+  const ssh = await choseSshKey(false);
 
-    const userName = user?.[0] ?? "Unknown";
-    const sshName = ssh?.[0] ?? "Unknown";
+  const userName = user?.[0] ?? "Unknown";
+  const sshName = ssh?.[0] ?? "Unknown";
 
-    if (await checkIsThisActive(userName)) {
-        console.log("You can't disconnect active user. Deactivate profile first.");
-        return;
-    }
+  if (await checkIsThisActive(userName)) {
+    console.log("You can't disconnect active user. Deactivate profile first.");
+    return;
+  }
 
-    const conectionSSH = user?.[1] ?? "Unknown";
-    console.log(conectionSSH)
-    const conectionUser = ssh?.[1] ?? "Unknown";
-    console.log(conectionUser)
+  const conectionSSH = user?.[1] ?? "Unknown";
+  console.log(conectionSSH);
+  const conectionUser = ssh?.[1] ?? "Unknown";
+  console.log(conectionUser);
 
-    if (conectionUser === userName || conectionSSH === sshName){
-        await disconnectSshKeyAndUser(userName, sshName)
-    } else {
-        console.log("This key and user are not connected")
-    }
-
+  if (conectionUser === userName || conectionSSH === sshName) {
+    await disconnectSshKeyAndUser(userName, sshName);
+  } else {
+    console.log("This key and user are not connected");
+  }
 }
 
 export async function deleteSelectedKvObject(key: string, value: string) {
@@ -98,16 +97,19 @@ export async function deleteSelectedKvObject(key: string, value: string) {
 }
 
 export async function checkIsThisActive(usernameOrSSHKey: string) {
-    const kv = await Deno.openKv();
-    const activeProfile = await kv.get(["activeProfile"])
-    const activeSSHKey = await kv.get(["activeSSHKey"])
-    const activeProfileName = activeProfile?.value ?? "Empty"
-    const activeSSHKeyName = activeSSHKey?.value ?? "Empty"
-    kv.close();
-  
-    if (`${activeProfileName}` === usernameOrSSHKey || `${activeSSHKeyName}` === usernameOrSSHKey) {
-      return true;
-    } else {
-      return false;
-    }
+  const kv = await Deno.openKv();
+  const activeProfile = await kv.get(["activeProfile"]);
+  const activeSSHKey = await kv.get(["activeSSHKey"]);
+  const activeProfileName = activeProfile?.value ?? "Empty";
+  const activeSSHKeyName = activeSSHKey?.value ?? "Empty";
+  kv.close();
+
+  if (
+    `${activeProfileName}` === usernameOrSSHKey ||
+    `${activeSSHKeyName}` === usernameOrSSHKey
+  ) {
+    return true;
+  } else {
+    return false;
   }
+}

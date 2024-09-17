@@ -41,7 +41,6 @@ async function changeSSHConfig(key: string, newValue: string) {
   } else {
     console.log("Error getting config");
   }
-
 }
 
 export async function activateProfile() {
@@ -103,6 +102,8 @@ export async function deactivateProfile() {
   await kv.delete(["activeSSHKey"]);
 
   kv.close();
+
+  console.log("Profile deactivated successfully");
 }
 
 // activateProfile();
