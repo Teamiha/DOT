@@ -1,4 +1,6 @@
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/input.ts";
+import { chooseUser } from "./userManager.ts";
+import { choseSshKey } from "./sshKeyGen.ts";
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
@@ -63,6 +65,26 @@ export async function disconnectSshKeyAndUser(
   console.log(`User ${username} disconnected to SSH key ${keyName}`);
 
   kv.close();
+}
+
+export async function manualDisconnectSshKeyAndUser() {
+    const user = await chooseUser(false);
+    const ssh = await choseSshKey(false);
+
+    const userName = user?.[0] ?? "Unknown";
+    const sshName = ssh?.[0] ?? "Unknown";
+
+    const conectionSSH = user?.[2] ?? "Unknown";
+    console.log(conectionSSH)
+    const conectionUser = ssh?.[1] ?? "Unknown";
+    console.log(conectionUser)
+
+    if (conectionUser === userName || conectionSSH === sshName){
+        await disconnectSshKeyAndUser(userName, sshName)
+    } else {
+        console.log("This key and user are not connected")
+    }
+
 }
 
 export async function deleteSelectedKvObject(key: string, value: string) {

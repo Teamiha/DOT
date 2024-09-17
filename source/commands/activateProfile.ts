@@ -9,17 +9,19 @@ const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/testconfig`;
 const PATHTOSSHKEYS = `${Deno.env.get("HOME")}/.ssh/`;
 
 async function setActiveProfile(username: string, sshKey: string) {
-    const kv = await Deno.openKv();
-    await kv.set(["activeProfile"], [username]);
-    await kv.set(["activeSSHKey"], [sshKey]);
-    kv.close();
+  const kv = await Deno.openKv();
+  await kv.set(["activeProfile"], [username]);
+  await kv.set(["activeSSHKey"], [sshKey]);
+  kv.close();
 }
 
-function stringifySSHConfig(config: { key: string; value: string }[] | undefined,): string {
+function stringifySSHConfig(
+  config: { key: string; value: string }[] | undefined,
+): string {
   if (config === undefined) {
     return "";
   }
-  return config.map(entry => `${entry.key} ${entry.value}`).join("\n");
+  return config.map((entry) => `${entry.key} ${entry.value}`).join("\n");
 }
 
 async function changeSSHConfig(key: string, newValue: string) {
@@ -40,12 +42,9 @@ async function changeSSHConfig(key: string, newValue: string) {
     console.log("Error getting config");
   }
 
-  
-//   console.log(convertResult)
+  //   console.log(convertResult)
 
-  
-
-//   console.log(`Value ${key} successfully changed to ${newValue}`);
+  //   console.log(`Value ${key} successfully changed to ${newValue}`);
 }
 
 export async function activateProfile() {
@@ -62,7 +61,10 @@ export async function activateProfile() {
     if (selectedUserSSHKey === "Empty") {
       console.log("This user does not have an SSH key attached.");
     } else {
-      const newKey = await changeSSHConfig("IdentityFile", `${PATHTOSSHKEYS}${selectedUserSSHKey}`) || { success: false };
+      const newKey = await changeSSHConfig(
+        "IdentityFile",
+        `${PATHTOSSHKEYS}${selectedUserSSHKey}`,
+      ) || { success: false };
       if (newKey.success === true) {
         // await zsh(`git config --global --replace-all user.name ${selectedUserName}`);
         // await zsh(`git config --global --replace-all user.email ${selectedUserEmail}`);
@@ -79,42 +81,35 @@ export async function activateProfile() {
 
 export async function showActiveProfileStatus() {
   const kv = await Deno.openKv();
-  const activeProfile = await kv.get(["activeProfile"])
-  const activeSSHKey = await kv.get(["activeSSHKey"])
+  const activeProfile = await kv.get(["activeProfile"]);
+  const activeSSHKey = await kv.get(["activeSSHKey"]);
   kv.close();
 
   if (activeProfile.value === null || activeSSHKey.value === null) {
     console.log("No active profile found");
   } else {
-    console.log(`Current active profile: ${activeProfile?.value} | Current active SSH key: ${activeSSHKey?.value}`);
+    console.log(
+      `Current active profile: ${activeProfile?.value} | Current active SSH key: ${activeSSHKey?.value}`,
+    );
   }
 }
 
-
-// Добработать 
+// Добработать
 export async function deactivateProfile() {
-    const kv = await Deno.openKv();
-    const activeProfile = await kv.get(["activeProfile"])
-    const activeSSHKey = await kv.get(["activeSSHKey"])
-    if (activeProfile.value === null || activeSSHKey.value === null) {
-        console.log("No active profile");
-      }
-    
-    
-    await kv.delete(["activeProfile"]);
-    await kv.delete(["activeSSHKey"]);
-    
-      
-    
-   kv.close();   
+  const kv = await Deno.openKv();
+  const activeProfile = await kv.get(["activeProfile"]);
+  const activeSSHKey = await kv.get(["activeSSHKey"]);
+  if (activeProfile.value === null || activeSSHKey.value === null) {
+    console.log("No active profile");
+  }
+
+  await kv.delete(["activeProfile"]);
+  await kv.delete(["activeSSHKey"]);
+
+  kv.close();
 }
-
-
-
-
 
 // activateProfile();
 // showActiveProfileStatus();
 // checkIsThisUserActive("Jegnum");
 // deactivateProfile()
-

@@ -32,7 +32,7 @@ export async function getUserList(): Promise<Array<Deno.KvEntry<string>>> {
   return users;
 }
 
-export async function chooseUser() {
+export async function chooseUser(showDataInConsole: boolean) {
   const data = await getUserList();
   const result = await selectUserCore(data);
   if (result !== undefined) {
@@ -40,16 +40,20 @@ export async function chooseUser() {
     const email = result?.[2] ?? "Unknown";
     const connectedSSH = result?.[1] ?? "Unknown";
 
-    console.log(
-      "Name:",
-      name,
-      "|",
-      "Email:",
-      email,
-      "|",
-      "connectedSSH:",
-      connectedSSH,
-    );
+    if (showDataInConsole === true) {
+      console.log(
+        "Name:",
+        name,
+        "|",
+        "Email:",
+        email,
+        "|",
+        "connectedSSH:",
+        connectedSSH,
+      );
+    } else {
+      return [name, email, connectedSSH]
+    }
   } else {
     console.log("No data found.");
   }
@@ -59,13 +63,13 @@ export async function deleteUser() {
   const data = await getUserList();
   const result = await selectUserCore(data);
   const name = result?.[0] ?? "Unknown";
-  console.log(name)
+  console.log(name);
   const connectedSSH = result?.[1] ?? "Unknown";
 
   if (await checkIsThisActive(name)) {
     console.log("You can't delete active user. Deactivate profile first.");
     return;
-  } 
+  }
 
   if (result !== undefined) {
     if (connectedSSH !== "Empty") {

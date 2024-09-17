@@ -38,14 +38,17 @@ export async function getAllSshKeysList(): Promise<
   return keys;
 }
 
-export async function selectSshKey() {
+export async function choseSshKey(showDataInConsole: boolean) {
   const sshKeys = await getAllSshKeysList();
   const result = await selectSshKeyCore(sshKeys);
   if (result !== undefined) {
     const name = result?.[0] ?? "Unknown";
     const conection = result?.[1] ?? "Unknown";
-
+    if (showDataInConsole === true) {
     console.log("Name:", name, "|", "Conection user:", conection);
+    } else {
+      return [name, conection]
+    }
   } else {
     console.log("No data found.");
   }

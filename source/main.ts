@@ -1,19 +1,23 @@
 // import { Command } from "../deps.ts";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
-import { disconnectSshKeyAndUser } from "./commands/service.ts";
+import { manualDisconnectSshKeyAndUser } from "./commands/service.ts";
 import {
   chooseUser,
   createNewUser,
   deleteUser,
 } from "./commands/userManager.ts";
 import {
+  choseSshKey,
   createNewSshKey,
   deleteSshKey,
-  selectSshKey,
 } from "../source/commands/sshKeyGen.ts";
 import { confirmTermination } from "../source/commands/clearAllDenoKv.ts";
 import { connectUserToSsh } from "../source/commands/connectUserAndSshKey.ts";
-import { showActiveProfileStatus, activateProfile, deactivateProfile } from "./commands/activateProfile.ts";
+import {
+  activateProfile,
+  deactivateProfile,
+  showActiveProfileStatus,
+} from "./commands/activateProfile.ts";
 
 // const USERNAME = Deno.env.get("USER");
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/config`;
@@ -28,10 +32,11 @@ async function displayMenu() {
       { name: "Create new User", value: "4" },
       { name: "Create new SSH key", value: "5" },
       { name: "Connect User to SSH key", value: "6" },
-      { name: "List all Users", value: "7" },
-      { name: "List all SSH keys", value: "8" },
-      { name: "Delete SSH key", value: "9" },
-      { name: "Delete User", value: "10" },
+      { name: "Disconnect User to SSH key", value: "7" },
+      { name: "List all Users", value: "8" },
+      { name: "List all SSH keys", value: "9" },
+      { name: "Delete SSH key", value: "10" },
+      { name: "Delete User", value: "11" },
       { name: "Terminate all DataBase", value: "20" },
       { name: "Exit", value: "30" },
     ],
@@ -57,15 +62,18 @@ async function displayMenu() {
       await connectUserToSsh();
       break;
     case "7":
-      await chooseUser();
+      await manualDisconnectSshKeyAndUser();
       break;
     case "8":
-      await selectSshKey();
+      await chooseUser(true);
       break;
     case "9":
-      await deleteSshKey();
+      await choseSshKey(true);
       break;
     case "10":
+      await deleteSshKey();
+      break;
+    case "11":
       await deleteUser();
       break;
     case "20":
