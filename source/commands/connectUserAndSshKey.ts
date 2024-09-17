@@ -1,6 +1,5 @@
-import { getUserList } from "./userManager.ts";
-import { getAllSshKeysList } from "./sshKeyGen.ts";
-import { selectSshKeyCore, selectUserCore } from "./selectCore.ts";
+import { chooseUser } from "./userManager.ts";
+import { choseSshKey } from "./sshKeyManager.ts";
 
 async function keyRecording(user: string, sshKey: string, email: string) {
   const kv = await Deno.openKv();
@@ -14,11 +13,9 @@ async function keyRecording(user: string, sshKey: string, email: string) {
 }
 
 export async function connectUserToSsh() {
-  const userList = await getUserList();
-  const sshList = await getAllSshKeysList();
+  const userListResult = await chooseUser(false);
+  const sshListResult = await choseSshKey(false);
 
-  const userListResult = await selectUserCore(userList);
-  const sshListResult = await selectSshKeyCore(sshList);
   if (userListResult === undefined || sshListResult === undefined) {
     console.log("List is empty");
     return;

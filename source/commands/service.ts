@@ -1,6 +1,6 @@
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/input.ts";
 import { chooseUser } from "./userManager.ts";
-import { choseSshKey } from "./sshKeyGen.ts";
+import { choseSshKey } from "./sshKeyManager.ts";
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
@@ -36,7 +36,6 @@ export async function readGitConfigFile(filePath: string) {
       if (trimmedLine) {
         const [key, value] = trimmedLine.split(/\s+/);
         rezult.push({ key, value });
-        // console.log(`${key} - ${value}`);
       }
     }
     return rezult;
@@ -74,7 +73,12 @@ export async function manualDisconnectSshKeyAndUser() {
     const userName = user?.[0] ?? "Unknown";
     const sshName = ssh?.[0] ?? "Unknown";
 
-    const conectionSSH = user?.[2] ?? "Unknown";
+    if (await checkIsThisActive(userName)) {
+        console.log("You can't disconnect active user. Deactivate profile first.");
+        return;
+    }
+
+    const conectionSSH = user?.[1] ?? "Unknown";
     console.log(conectionSSH)
     const conectionUser = ssh?.[1] ?? "Unknown";
     console.log(conectionUser)

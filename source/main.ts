@@ -10,7 +10,7 @@ import {
   choseSshKey,
   createNewSshKey,
   deleteSshKey,
-} from "../source/commands/sshKeyGen.ts";
+} from "./commands/sshKeyManager.ts";
 import { confirmTermination } from "../source/commands/clearAllDenoKv.ts";
 import { connectUserToSsh } from "../source/commands/connectUserAndSshKey.ts";
 import {
@@ -20,7 +20,7 @@ import {
 } from "./commands/activateProfile.ts";
 
 // const USERNAME = Deno.env.get("USER");
-const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/config`;
+// const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/config`;
 
 async function displayMenu() {
   const result = await Select.prompt({

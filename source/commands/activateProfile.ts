@@ -1,7 +1,7 @@
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { readGitConfigFile } from "./service.ts";
-import { getUserList } from "./userManager.ts";
-import { selectUserCore } from "./selectCore.ts";
+import { chooseUser } from "./userManager.ts";
+// import { selectUserCore } from "./selectCore.ts";
 import { zsh } from "@vseplet/shelly";
 
 // ЗАМЕНИТЬ!!!!
@@ -42,14 +42,10 @@ async function changeSSHConfig(key: string, newValue: string) {
     console.log("Error getting config");
   }
 
-  //   console.log(convertResult)
-
-  //   console.log(`Value ${key} successfully changed to ${newValue}`);
 }
 
 export async function activateProfile() {
-  const data = await getUserList();
-  const selectedUser = await selectUserCore(data);
+  const selectedUser = await chooseUser(false);
   const selectedUserName = selectedUser?.[0] ?? "Empty";
 
   console.log(selectedUserName);
