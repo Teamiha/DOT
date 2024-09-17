@@ -70,3 +70,18 @@ export async function deleteSelectedKvObject(key: string, value: string) {
   await kv.delete([key, value]);
   kv.close();
 }
+
+export async function checkIsThisActive(usernameOrSSHKey: string) {
+    const kv = await Deno.openKv();
+    const activeProfile = await kv.get(["activeProfile"])
+    const activeSSHKey = await kv.get(["activeSSHKey"])
+    const activeProfileName = activeProfile?.value ?? "Empty"
+    const activeSSHKeyName = activeSSHKey?.value ?? "Empty"
+    kv.close();
+  
+    if (`${activeProfileName}` === usernameOrSSHKey || `${activeSSHKeyName}` === usernameOrSSHKey) {
+      return true;
+    } else {
+      return false;
+    }
+  }

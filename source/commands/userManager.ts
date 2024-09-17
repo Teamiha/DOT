@@ -4,9 +4,9 @@ import {
   disconnectSshKeyAndUser,
   getUserInput,
 } from "./service.ts";
-import { checkIsThisActive } from "./activateProfile.ts";
+import { checkIsThisActive } from "./service.ts";
 
-export async function createNewProfile() {
+export async function createNewUser() {
   const name = await getUserInput("Please enter a name:");
   const email = await getUserInput("Please enter a email:");
   const ssh = "Empty";
@@ -19,7 +19,7 @@ export async function createNewProfile() {
   kv.close();
 }
 
-export async function getProfileList(): Promise<Array<Deno.KvEntry<string>>> {
+export async function getUserList(): Promise<Array<Deno.KvEntry<string>>> {
   const kv = await Deno.openKv();
 
   const iter = kv.list<string>({ prefix: ["userName:"] });
@@ -32,8 +32,8 @@ export async function getProfileList(): Promise<Array<Deno.KvEntry<string>>> {
   return users;
 }
 
-export async function chooseProfile() {
-  const data = await getProfileList();
+export async function chooseUser() {
+  const data = await getUserList();
   const result = await selectUserCore(data);
   if (result !== undefined) {
     const name = result?.[0] ?? "Unknown";
@@ -55,8 +55,8 @@ export async function chooseProfile() {
   }
 }
 
-export async function deleteProfile() {
-  const data = await getProfileList();
+export async function deleteUser() {
+  const data = await getUserList();
   const result = await selectUserCore(data);
   const name = result?.[0] ?? "Unknown";
   console.log(name)

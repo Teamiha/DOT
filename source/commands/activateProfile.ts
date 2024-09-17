@@ -1,6 +1,6 @@
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { readGitConfigFile } from "./service.ts";
-import { getProfileList } from "./profileManager.ts";
+import { getUserList } from "./userManager.ts";
 import { selectUserCore } from "./selectCore.ts";
 import { zsh } from "@vseplet/shelly";
 
@@ -49,7 +49,7 @@ async function changeSSHConfig(key: string, newValue: string) {
 }
 
 export async function activateProfile() {
-  const data = await getProfileList();
+  const data = await getUserList();
   const selectedUser = await selectUserCore(data);
   const selectedUserName = selectedUser?.[0] ?? "Empty";
 
@@ -90,26 +90,31 @@ export async function showActiveProfileStatus() {
   }
 }
 
+
+// Добработать 
 export async function deactivateProfile() {
-  
+    const kv = await Deno.openKv();
+    const activeProfile = await kv.get(["activeProfile"])
+    const activeSSHKey = await kv.get(["activeSSHKey"])
+    if (activeProfile.value === null || activeSSHKey.value === null) {
+        console.log("No active profile");
+      }
+    
+    
+    await kv.delete(["activeProfile"]);
+    await kv.delete(["activeSSHKey"]);
+    
+      
+    
+   kv.close();   
 }
 
-export async function checkIsThisActive(usernameOrSSHKey: string) {
-  const kv = await Deno.openKv();
-  const activeProfile = await kv.get(["activeProfile"])
-  const activeSSHKey = await kv.get(["activeSSHKey"])
-  const activeProfileName = activeProfile?.value ?? "Empty"
-  const activeSSHKeyName = activeSSHKey?.value ?? "Empty"
-  kv.close();
 
-  if (`${activeProfileName}` === usernameOrSSHKey || `${activeSSHKeyName}` === usernameOrSSHKey) {
-    return true;
-  } else {
-    return false;
-  }
-}
+
+
 
 // activateProfile();
 // showActiveProfileStatus();
 // checkIsThisUserActive("Jegnum");
+// deactivateProfile()
 

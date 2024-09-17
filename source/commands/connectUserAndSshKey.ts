@@ -1,4 +1,4 @@
-import { getProfileList } from "./profileManager.ts";
+import { getUserList } from "./userManager.ts";
 import { getAllSshKeysList } from "./sshKeyGen.ts";
 import { selectSshKeyCore, selectUserCore } from "./selectCore.ts";
 
@@ -14,7 +14,7 @@ async function keyRecording(user: string, sshKey: string, email: string) {
 }
 
 export async function connectUserToSsh() {
-  const userList = await getProfileList();
+  const userList = await getUserList();
   const sshList = await getAllSshKeysList();
 
   const userListResult = await selectUserCore(userList);

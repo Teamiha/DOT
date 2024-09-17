@@ -6,7 +6,7 @@ import {
   getUserInput,
 } from "./service.ts";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/confirm.ts";
-import { checkIsThisActive } from "./activateProfile.ts";
+import { checkIsThisActive } from "./service.ts";
 
 export async function createNewSshKey() {
   const kv = await Deno.openKv();
