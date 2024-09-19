@@ -4,6 +4,7 @@ import {
   deleteSelectedKvObject,
   disconnectSshKeyAndUser,
   getUserInput,
+  readPublicKey,
 } from "./service.ts";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/confirm.ts";
 import { checkIsThisActive } from "./service.ts";
@@ -22,7 +23,7 @@ export async function createNewSshKey() {
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
     await kv.set(["sshKeyName:", name], ["connectedUser", connectedUser]);
-    // await zsh("ssh-add -K ~/.ssh/id_rsa_whatever")
+    // await zsh(`ssh-add -K ~/.ssh/DOT/${name}`)
   } else {
     console.log("Error: SSH key generation failed");
   }
@@ -43,13 +44,18 @@ export async function getAllSshKeysList(): Promise<
 }
 
 export async function choseSshKey(showDataInConsole: boolean) {
+
   const sshKeys = await getAllSshKeysList();
   const result = await selectSshKeyCore(sshKeys);
+  
   if (result !== undefined) {
     const name = result?.[0] ?? "Unknown";
     const conection = result?.[1] ?? "Unknown";
     if (showDataInConsole === true) {
+      const publicKey = await readPublicKey(name)
+
       console.log("Name:", name, "|", "Conection user:", conection);
+      console.log("Public Key:", publicKey)
     } else {
       return [name, conection];
     }
