@@ -19,6 +19,7 @@ export async function createNewSshKey() {
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
     await kv.set(["sshKeyName:", name], ["connectedUser", connectedUser]);
+    // await zsh("ssh-add -K ~/.ssh/id_rsa_whatever")
   } else {
     console.log("Error: SSH key generation failed");
   }
