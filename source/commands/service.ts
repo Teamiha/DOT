@@ -26,9 +26,9 @@ export async function getUserInput(prompt: string): Promise<string> {
 }
 
 export async function readPublicKey(name: string) {
-  const filePath = `${Deno.env.get("HOME")}/.ssh/DOT/${name}.pub`
-  const publicKey = await Deno.readTextFile(filePath)
-  return publicKey
+  const filePath = `${Deno.env.get("HOME")}/.ssh/DOT/${name}.pub`;
+  const publicKey = await Deno.readTextFile(filePath);
+  return publicKey;
 }
 
 export async function readGitConfigFile(filePath: string) {

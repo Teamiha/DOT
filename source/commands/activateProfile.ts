@@ -1,10 +1,8 @@
-import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+// import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { readGitConfigFile } from "./service.ts";
 import { chooseUser } from "./userManager.ts";
-// import { selectUserCore } from "./selectCore.ts";
 import { zsh } from "@vseplet/shelly";
 import { startupSetup } from "./creatingEnvironment.ts";
-
 
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTOSSHKEYS = `${Deno.env.get("HOME")}/.ssh/DOT/`;
@@ -52,8 +50,8 @@ export async function activateProfile() {
 
   const selectedUserSSHKey = selectedUser?.[1] ?? "Empty";
   const selectedUserEmail = selectedUser?.[2] ?? "Empty";
-  
-  await startupSetup()
+
+  await startupSetup();
 
   if (selectedUser !== undefined) {
     if (selectedUserSSHKey === "Empty") {

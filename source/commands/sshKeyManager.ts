@@ -17,7 +17,9 @@ export async function createNewSshKey() {
 
   const name = await getUserInput("Enter a name for the SSH key:");
   const email = await getUserInput("Enter your email:");
-  const ssh = await zsh(`ssh-keygen -t ed25519 -C ${email} -f ~/.ssh/DOT/${name}`);
+  const ssh = await zsh(
+    `ssh-keygen -t ed25519 -C ${email} -f ~/.ssh/DOT/${name}`,
+  );
   const connectedUser = "Empty";
 
   if (ssh.success === true) {
@@ -44,18 +46,16 @@ export async function getAllSshKeysList(): Promise<
 }
 
 export async function choseSshKey(showDataInConsole: boolean) {
-
   const sshKeys = await getAllSshKeysList();
   const result = await selectSshKeyCore(sshKeys);
-  
+
   if (result !== undefined) {
     const name = result?.[0] ?? "Unknown";
     const conection = result?.[1] ?? "Unknown";
     if (showDataInConsole === true) {
-      const publicKey = await readPublicKey(name)
-
+      const publicKey = await readPublicKey(name);
       console.log("Name:", name, "|", "Conection user:", conection);
-      console.log("Public Key:", publicKey)
+      console.log("Public Key:", publicKey);
     } else {
       return [name, conection];
     }
@@ -74,7 +74,9 @@ export async function deleteSshKey() {
     const keyName = result?.[0] ?? "Unknown";
     const connectedUser = result?.[1] ?? "Unknown";
     const pathToDelete = `${Deno.env.get("HOME")}/.ssh/DOT/${keyName}`;
-    const pathToDeletePubKey = `${Deno.env.get("HOME")}/.ssh/DOT/${keyName}.pub`;
+    const pathToDeletePubKey = `${
+      Deno.env.get("HOME")
+    }/.ssh/DOT/${keyName}.pub`;
 
     if (await checkIsThisActive(keyName)) {
       console.log("You can't delete active key. Deactivate profile first.");
