@@ -3,10 +3,11 @@ import { readGitConfigFile } from "./service.ts";
 import { chooseUser } from "./userManager.ts";
 // import { selectUserCore } from "./selectCore.ts";
 import { zsh } from "@vseplet/shelly";
+import { startupSetup } from "./creatingEnvironment.ts";
 
-// ЗАМЕНИТЬ!!!!
-const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/testconfig`;
-const PATHTOSSHKEYS = `${Deno.env.get("HOME")}/.ssh/`;
+
+const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
+const PATHTOSSHKEYS = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
 async function setActiveProfile(username: string, sshKey: string) {
   const kv = await Deno.openKv();
@@ -51,6 +52,8 @@ export async function activateProfile() {
 
   const selectedUserSSHKey = selectedUser?.[1] ?? "Empty";
   const selectedUserEmail = selectedUser?.[2] ?? "Empty";
+  
+  await startupSetup()
 
   if (selectedUser !== undefined) {
     if (selectedUserSSHKey === "Empty") {

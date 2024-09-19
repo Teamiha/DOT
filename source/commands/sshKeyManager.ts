@@ -7,13 +7,16 @@ import {
 } from "./service.ts";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/confirm.ts";
 import { checkIsThisActive } from "./service.ts";
+import { startupSetup } from "./creatingEnvironment.ts";
 
 export async function createNewSshKey() {
+  await startupSetup();
+
   const kv = await Deno.openKv();
 
   const name = await getUserInput("Enter a name for the SSH key:");
   const email = await getUserInput("Enter your email:");
-  const ssh = await zsh(`ssh-keygen -t ed25519 -C ${email} -f ~/.ssh/${name}`);
+  const ssh = await zsh(`ssh-keygen -t ed25519 -C ${email} -f ~/.ssh/DOT/${name}`);
   const connectedUser = "Empty";
 
   if (ssh.success === true) {
@@ -64,8 +67,8 @@ export async function deleteSshKey() {
 
     const keyName = result?.[0] ?? "Unknown";
     const connectedUser = result?.[1] ?? "Unknown";
-    const pathToDelete = `${Deno.env.get("HOME")}/.ssh/${keyName}`;
-    const pathToDeletePubKey = `${Deno.env.get("HOME")}/.ssh/${keyName}.pub`;
+    const pathToDelete = `${Deno.env.get("HOME")}/.ssh/DOT/${keyName}`;
+    const pathToDeletePubKey = `${Deno.env.get("HOME")}/.ssh/DOT/${keyName}.pub`;
 
     if (await checkIsThisActive(keyName)) {
       console.log("You can't delete active key. Deactivate profile first.");

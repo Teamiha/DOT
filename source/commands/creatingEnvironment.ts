@@ -13,7 +13,9 @@ User git
 AddKeysToAgent yes
 UseKeychain yes
 IdentityFile empty
-IdentitiesOnly yes`;
+IdentitiesOnly yes
+UserKnownHostsFile ${PATHTODOT}known_hosts`
+;
 
 export async function startupSetup() {
     const status = await checkIfDotFolderExist()
@@ -31,12 +33,12 @@ export async function checkIfDotFolderExist(): Promise<boolean> {
   try {
     const dirInfo = await Deno.stat(PATHTODOT);
     if (dirInfo.isDirectory) {
-      console.log(`Directory already exists.`);
+    //   console.log(`Directory already exists.`);
       isExist = true
     }
   } catch (error) {
     if (error instanceof Deno.errors.NotFound) {
-      console.log(`Directory dont exists.`);
+    //   console.log(`Directory dont exists.`);
       isExist = false
     }
   }
@@ -64,4 +66,4 @@ async function test(){
 
 // test()
 
-startupSetup()
+// startupSetup()
