@@ -25,7 +25,7 @@ export async function createNewSshKey() {
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
     await kv.set(["sshKeyName:", name], ["connectedUser", connectedUser]);
-    // await zsh(`ssh-add -K ~/.ssh/DOT/${name}`)
+    await zsh(`ssh-add -K ~/.ssh/DOT/${name}`);
   } else {
     console.log("Error: SSH key generation failed");
   }
@@ -91,6 +91,8 @@ export async function deleteSshKey() {
       if (confirmed) {
         await disconnectSshKeyAndUser(connectedUser, keyName);
         await deleteSelectedKvObject("sshKeyName:", keyName);
+        await zsh(`ssh-add -d ~/.ssh/DOT/${keyName}`)
+        await zsh(`security delete-generic-password -l "SSH: ~/.ssh/DOT/${keyName}"`)
         await Deno.remove(pathToDelete);
         await Deno.remove(pathToDeletePubKey);
         console.log(`Key ${keyName} deleted successfully`);
@@ -99,6 +101,8 @@ export async function deleteSshKey() {
       }
     } else {
       await deleteSelectedKvObject("sshKeyName:", keyName);
+      await zsh(`ssh-add -d ~/.ssh/DOT/${keyName}`)
+      await zsh(`security delete-generic-password -l "SSH: ~/.ssh/DOT/${keyName}"`)
       await Deno.remove(pathToDelete);
       await Deno.remove(pathToDeletePubKey);
       console.log(`Key ${keyName} deleted successfully`);
