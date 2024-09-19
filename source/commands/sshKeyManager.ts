@@ -88,25 +88,21 @@ export async function deleteSshKey() {
         `This key is connected to a user ${connectedUser}, are you sure you want to delete it?`,
       );
       const confirmed: boolean = await Confirm.prompt("Can you confirm?");
-      if (confirmed) {
-        await disconnectSshKeyAndUser(connectedUser, keyName);
-        await deleteSelectedKvObject("sshKeyName:", keyName);
-        await zsh(`ssh-add -d ~/.ssh/DOT/${keyName}`)
-        await zsh(`security delete-generic-password -l "SSH: ~/.ssh/DOT/${keyName}"`)
-        await Deno.remove(pathToDelete);
-        await Deno.remove(pathToDeletePubKey);
-        console.log(`Key ${keyName} deleted successfully`);
-      } else {
+      if (!confirmed) {
         console.log("Key deletion canceled");
+        return;
       }
-    } else {
-      await deleteSelectedKvObject("sshKeyName:", keyName);
-      await zsh(`ssh-add -d ~/.ssh/DOT/${keyName}`)
-      await zsh(`security delete-generic-password -l "SSH: ~/.ssh/DOT/${keyName}"`)
-      await Deno.remove(pathToDelete);
-      await Deno.remove(pathToDeletePubKey);
-      console.log(`Key ${keyName} deleted successfully`);
+      await disconnectSshKeyAndUser(connectedUser, keyName);
     }
+
+    await deleteSelectedKvObject("sshKeyName:", keyName);
+    await zsh(`ssh-add -d ~/.ssh/DOT/${keyName}`);
+    await zsh(
+      `security delete-generic-password -l "SSH: ~/.ssh/DOT/${keyName}"`,
+    );
+    await Deno.remove(pathToDelete);
+    await Deno.remove(pathToDeletePubKey);
+    console.log(`Key ${keyName} deleted successfully`);
   }
 }
 
