@@ -1,4 +1,5 @@
 import { zsh } from "@vseplet/shelly";
+import { ensureFile } from "https://deno.land/std/fs/mod.ts";
 
 /*
 
@@ -54,28 +55,40 @@ async function chooseProfileBeta(
 
 
 */
+const filePath = `${Deno.env.get("HOME")}/.zshrcTest`;
+const newLine = 'export GIT_SSH_COMMAND="ssh -F /custom/path/ssh_config"';
 
 
-async function reset() {
-   await zsh(`unset GIT_SSH_COMMAND`);
+// async function reset() {
+//    await zsh(`unset GIT_SSH_COMMAND`);
+// }
+
+async function test(path: string, content: string) {
+  await ensureFile(path);
+  const file = await Deno.open(path, { write: true, append: true });
+  const encoder = new TextEncoder();
+  await file.write(encoder.encode("\n" + content + "\n"));
+  file.close();
+
 }
 
-async function test() {
-  const cmd = new Deno.Command("sh", {
-    args: ["-c", "echo $SHELL"],
-  });
+async function removeLineFromFile(path: string, lineToRemove: string) {
+  const fileContent = await Deno.readTextFile(path);
+  const lines = fileContent.split("\n");
+  const newLines = lines.filter(line => line.trim() !== lineToRemove.trim());
   
-  const { stdout } = await cmd.output();
-  const fullPath = new TextDecoder().decode(stdout).trim();
-  
-  const shellName = fullPath.split('/').pop();
-  
-  if (shellName) {
-    return(shellName)
-  } else {
-    console.log("Unable to determine shell name");
+  if (lines.length === newLines.length) {
+    console.log("The specified line was not found in the file.");
+    return;
   }
+
+  const newContent = newLines.join("\n");
+  await Deno.writeTextFile(path, newContent);
+  console.log("Line removed successfully!");
 }
 
-console.log(await test())
-test()
+
+// console.log(await test())
+// test(filePath, newLine)
+
+removeLineFromFile(filePath, newLine)

@@ -6,6 +6,9 @@ import { zsh } from "@vseplet/shelly";
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
+// Сделать вариантативность и чекать какой шелл. 
+const PATHTOSHELLCONFIG = `${Deno.env.get("HOME")}/.zshrcTest`;
+
 const initialConfigFilling = `Host test
 HostName github.com
 User git
@@ -21,6 +24,7 @@ export async function startupSetup() {
     console.log("The directory already exists");
   } else {
     await createEnvironment();
+    await shellSetup();
     console.log("Initial setup completed successfully");
   }
 }
@@ -53,6 +57,15 @@ async function createEnvironment() {
   const content = await Deno.readTextFile(PATHTOGITCONFIG);
   console.log("File contents:");
   console.log(content);
+}
+
+async function shellSetup() {
+    const shellUpdateLine = 'export GIT_SSH_COMMAND="ssh -F '+PATHTOGITCONFIG+'"';
+    await ensureFile(PATHTOSHELLCONFIG);
+    const file = await Deno.open(PATHTOSHELLCONFIG, { write: true, append: true });
+    const encoder = new TextEncoder();
+    await file.write(encoder.encode("\n" + shellUpdateLine + "\n"));
+    file.close();
 }
 
 // async function test(){
