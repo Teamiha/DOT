@@ -58,7 +58,6 @@ async function chooseProfileBeta(
 const filePath = `${Deno.env.get("HOME")}/.zshrcTest`;
 const newLine = 'export GIT_SSH_COMMAND="ssh -F /custom/path/ssh_config"';
 
-
 // async function reset() {
 //    await zsh(`unset GIT_SSH_COMMAND`);
 // }
@@ -69,11 +68,7 @@ async function test(path: string, content: string) {
   const encoder = new TextEncoder();
   await file.write(encoder.encode("\n" + content + "\n"));
   file.close();
-
 }
-
-
-
 
 // console.log(await test())
 // test(filePath, newLine)

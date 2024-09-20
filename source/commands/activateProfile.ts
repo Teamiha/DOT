@@ -7,8 +7,6 @@ import { startupSetup } from "./creatingEnvironment.ts";
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTOSSHKEYS = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
-
-
 async function setActiveProfile(username: string, sshKey: string) {
   const kv = await Deno.openKv();
   await kv.set(["activeProfile"], [username]);

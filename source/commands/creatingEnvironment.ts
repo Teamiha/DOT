@@ -6,7 +6,7 @@ import { zsh } from "@vseplet/shelly";
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
-// Сделать вариантативность и чекать какой шелл. 
+// Сделать вариантативность и чекать какой шелл.
 const PATHTOSHELLCONFIG = `${Deno.env.get("HOME")}/.zshrcTest`;
 
 const initialConfigFilling = `Host test
@@ -25,6 +25,7 @@ export async function startupSetup() {
   } else {
     await createEnvironment();
     await shellSetup();
+    await zsh('export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG + '"');
     console.log("Initial setup completed successfully");
   }
 }
@@ -60,12 +61,16 @@ async function createEnvironment() {
 }
 
 async function shellSetup() {
-    const shellUpdateLine = 'export GIT_SSH_COMMAND="ssh -F '+PATHTOGITCONFIG+'"';
-    await ensureFile(PATHTOSHELLCONFIG);
-    const file = await Deno.open(PATHTOSHELLCONFIG, { write: true, append: true });
-    const encoder = new TextEncoder();
-    await file.write(encoder.encode("\n" + shellUpdateLine));
-    file.close();
+  const shellUpdateLine = 'export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG +
+    '"';
+  await ensureFile(PATHTOSHELLCONFIG);
+  const file = await Deno.open(PATHTOSHELLCONFIG, {
+    write: true,
+    append: true,
+  });
+  const encoder = new TextEncoder();
+  await file.write(encoder.encode("\n" + shellUpdateLine));
+  file.close();
 }
 
 // async function test(){
@@ -74,5 +79,3 @@ async function shellSetup() {
 // }
 
 // test()
-
-
