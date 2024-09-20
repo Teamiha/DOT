@@ -64,7 +64,7 @@ async function shellSetup() {
     await ensureFile(PATHTOSHELLCONFIG);
     const file = await Deno.open(PATHTOSHELLCONFIG, { write: true, append: true });
     const encoder = new TextEncoder();
-    await file.write(encoder.encode("\n" + shellUpdateLine + "\n"));
+    await file.write(encoder.encode("\n" + shellUpdateLine));
     file.close();
 }
 
@@ -75,4 +75,4 @@ async function shellSetup() {
 
 // test()
 
-// startupSetup()
+

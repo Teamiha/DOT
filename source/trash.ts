@@ -72,23 +72,10 @@ async function test(path: string, content: string) {
 
 }
 
-async function removeLineFromFile(path: string, lineToRemove: string) {
-  const fileContent = await Deno.readTextFile(path);
-  const lines = fileContent.split("\n");
-  const newLines = lines.filter(line => line.trim() !== lineToRemove.trim());
-  
-  if (lines.length === newLines.length) {
-    console.log("The specified line was not found in the file.");
-    return;
-  }
 
-  const newContent = newLines.join("\n");
-  await Deno.writeTextFile(path, newContent);
-  console.log("Line removed successfully!");
-}
 
 
 // console.log(await test())
 // test(filePath, newLine)
 
-removeLineFromFile(filePath, newLine)
+// removeLineFromFile(filePath, newLine)
