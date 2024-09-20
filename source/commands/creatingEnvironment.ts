@@ -7,7 +7,7 @@ const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
 // Сделать вариантативность и чекать какой шелл.
-const PATHTOSHELLCONFIG = `${Deno.env.get("HOME")}/.zshrcTest`;
+const PATHTOSHELLCONFIG = `${Deno.env.get("HOME")}/.zshrc`;
 
 const initialConfigFilling = `Host test
 HostName github.com

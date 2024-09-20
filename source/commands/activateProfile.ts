@@ -62,8 +62,8 @@ export async function activateProfile() {
         `${PATHTOSSHKEYS}${selectedUserSSHKey}`,
       ) || { success: false };
       if (newKey.success === true) {
-        // await zsh(`git config --global --replace-all user.name ${selectedUserName}`);
-        // await zsh(`git config --global --replace-all user.email ${selectedUserEmail}`);
+        await zsh(`git config --global --replace-all user.name ${selectedUserName}`);
+        await zsh(`git config --global --replace-all user.email ${selectedUserEmail}`);
         await setActiveProfile(selectedUserName, selectedUserSSHKey);
         console.log(`Profile ${selectedUserName} activated successfully`);
       } else {
@@ -124,4 +124,4 @@ export async function deactivateProfile() {
 // showActiveProfileStatus();
 // checkIsThisUserActive("Jegnum");
 // deactivateProfile()
-showActiveUser()
+// showActiveUser()
