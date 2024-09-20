@@ -90,6 +90,19 @@ export async function showActiveProfileStatus() {
   }
 }
 
+export async function showActiveUser() {
+  const kv = await Deno.openKv();
+  const activeProfile = await kv.get(["activeProfile"]);
+  const user = `${activeProfile?.value}`;
+  const activeUser = await kv.get(["userName:", user]);
+  const userValue = activeUser?.value as string ?? undefined;
+  const email = userValue[3]
+
+  kv.close();
+
+  return [user, email]
+}
+
 // Добработать
 export async function deactivateProfile() {
   const kv = await Deno.openKv();
@@ -111,3 +124,4 @@ export async function deactivateProfile() {
 // showActiveProfileStatus();
 // checkIsThisUserActive("Jegnum");
 // deactivateProfile()
+showActiveUser()
