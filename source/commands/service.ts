@@ -119,3 +119,20 @@ export async function checkIsThisActive(usernameOrSSHKey: string) {
     return false;
   }
 }
+
+export async function checShell() {
+  const cmd = new Deno.Command("sh", {
+    args: ["-c", "echo $SHELL"],
+  });
+  
+  const { stdout } = await cmd.output();
+  const fullPath = new TextDecoder().decode(stdout).trim();
+  
+  const shellName = fullPath.split('/').pop();
+  
+  if (shellName) {
+    return(shellName)
+  } else {
+    console.log("Unable to determine shell name");
+  }
+}

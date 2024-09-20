@@ -1,3 +1,5 @@
+import { zsh } from "@vseplet/shelly";
+
 /*
 
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
@@ -52,3 +54,28 @@ async function chooseProfileBeta(
 
 
 */
+
+
+async function reset() {
+   await zsh(`unset GIT_SSH_COMMAND`);
+}
+
+async function test() {
+  const cmd = new Deno.Command("sh", {
+    args: ["-c", "echo $SHELL"],
+  });
+  
+  const { stdout } = await cmd.output();
+  const fullPath = new TextDecoder().decode(stdout).trim();
+  
+  const shellName = fullPath.split('/').pop();
+  
+  if (shellName) {
+    return(shellName)
+  } else {
+    console.log("Unable to determine shell name");
+  }
+}
+
+console.log(await test())
+test()

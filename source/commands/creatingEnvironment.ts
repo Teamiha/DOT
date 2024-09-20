@@ -1,6 +1,7 @@
 import { ensureFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
 // import * as path from "https://deno.land/std@0.224.0/path/mod.ts";
 // import { boolean } from "jsr:@cliffy/flags@1.0.0-rc.5";
+import { zsh } from "@vseplet/shelly";
 
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
