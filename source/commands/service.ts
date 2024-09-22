@@ -83,9 +83,8 @@ export async function manualDisconnectSshKeyAndUser() {
     console.log("You can't disconnect active user. Deactivate profile first.");
     return;
   }
-    
+
   await disconnectSshKeyAndUser(userName, sshName);
-  
 }
 
 export async function deleteSelectedKvObject(key: string, value: string) {

@@ -13,8 +13,8 @@ const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 // const PATHTOTEST = `${Deno.env.get("HOME")}/.ssh/DOT/testconfig`;
 
 function delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export async function gitClone() {
   const activeUserStatus = await showActiveProfileStatus(true);
@@ -60,27 +60,32 @@ export async function gitClone() {
   );
   console.log("Git set new URL --- Done");
 
-
-
-//   console.log(`git remote set-url origin git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`)
+  //   console.log(`git remote set-url origin git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`)
 }
 
-// Как заменить выброс ошибки простым сообщением? 
+// Как заменить выброс ошибки простым сообщением?
 function parseGitUrl(
   url: string,
-): { source: string; username: string; repository: string, projectName: string } {
+): {
+  source: string;
+  username: string;
+  repository: string;
+  projectName: string;
+} {
   const regex = /^git@([^:]+):([^/]+)\/(.+)$/;
 
   const match = url.match(regex);
 
   if (!match) {
-    console.log("Incorrect link format, check that it looks something like this:")
-    console.log("git@github.com-repo1:username/repository.git")
+    console.log(
+      "Incorrect link format, check that it looks something like this:",
+    );
+    console.log("git@github.com-repo1:username/repository.git");
     throw new Error("Invalid Git URL format");
   }
 
   const [, source, username, repository] = match;
-  const projectName = repository.replace(/\.git$/, '');
+  const projectName = repository.replace(/\.git$/, "");
 
   return { source, username, repository, projectName };
 }
