@@ -21,7 +21,7 @@ UserKnownHostsFile ${PATHTODOT}known_hosts`;
 export async function startupSetup() {
   const status = await checkIfDotFolderExist();
   if (status === true) {
-    console.log("The directory already exists");
+    // console.log("The directory already exists");
   } else {
     await createEnvironment();
     await shellSetup();
@@ -49,15 +49,17 @@ export async function checkIfDotFolderExist(): Promise<boolean> {
 
 async function createEnvironment() {
   await Deno.mkdir(PATHTODOT, { recursive: true });
-  console.log(`Created directory ${PATHTODOT}.`);
+  //   console.log(`Created directory ${PATHTODOT}.`);
 
   await ensureFile(PATHTOGITCONFIG);
+  // Сделать по красоте
+  await ensureFile(`${PATHTODOT}known_hosts`);
   await Deno.writeTextFile(PATHTOGITCONFIG, initialConfigFilling);
-  console.log(`Wrote config text to ${PATHTOGITCONFIG}`);
+  //   console.log(`Wrote config text to ${PATHTOGITCONFIG}`);
 
-  const content = await Deno.readTextFile(PATHTOGITCONFIG);
-  console.log("File contents:");
-  console.log(content);
+  //   const content = await Deno.readTextFile(PATHTOGITCONFIG);
+  //   console.log("File contents:");
+  //   console.log(content);
 }
 
 async function shellSetup() {
