@@ -12,6 +12,10 @@ const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
 // const PATHTOTEST = `${Deno.env.get("HOME")}/.ssh/DOT/testconfig`;
 
+function delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 export async function gitClone() {
   const activeUserStatus = await showActiveProfileStatus(true);
   if (activeUserStatus === false) {
@@ -48,27 +52,37 @@ export async function gitClone() {
   await zsh(`git clone ${gitCloneURL}`);
   console.log("repository clone --- Done");
 
-  
+  await delay(2000);
+  console.log("Delay --- Done");
+
   await zsh(
-    `git remote set-url origin git@${parseGitUrlData.source}-${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`,
+    `git -C ${CURRENTDIRECTORY}/${parseGitUrlData.projectName} remote set-url origin git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`,
   );
   console.log("Git set new URL --- Done");
+
+
+
+//   console.log(`git remote set-url origin git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`)
 }
 
+// Как заменить выброс ошибки простым сообщением? 
 function parseGitUrl(
   url: string,
-): { source: string; username: string; repository: string } {
+): { source: string; username: string; repository: string, projectName: string } {
   const regex = /^git@([^:]+):([^/]+)\/(.+)$/;
 
   const match = url.match(regex);
 
   if (!match) {
+    console.log("Incorrect link format, check that it looks something like this:")
+    console.log("git@github.com-repo1:username/repository.git")
     throw new Error("Invalid Git URL format");
   }
 
   const [, source, username, repository] = match;
+  const projectName = repository.replace(/\.git$/, '');
 
-  return { source, username, repository };
+  return { source, username, repository, projectName };
 }
 
 async function updateConfigToNewLocalRepository(
@@ -98,11 +112,11 @@ UserKnownHostsFile ${PATHTODOT}known_hosts`;
 async function connectLocalRepositoryToCurrentSSH() {
 }
 
-async function setCurrentUserAsLocal() {
-  const activeUser = await showActiveUser();
-  await zsh(`git config --local user.name "${activeUser[0]}"`);
-  await zsh(`git config --local user.email "${activeUser[1]}"`);
-}
+// async function setCurrentUserAsLocal() {
+//   const activeUser = await showActiveUser();
+//   await zsh(`git config --local user.name "${activeUser[0]}"`);
+//   await zsh(`git config --local user.email "${activeUser[1]}"`);
+// }
 
 // async function test() {
 //   const gitUrl = "git@gitlab.com:petproject2655638/privatetest.git";
@@ -118,4 +132,4 @@ async function setCurrentUserAsLocal() {
 // }
 
 // test()
-gitClone();
+// gitClone();

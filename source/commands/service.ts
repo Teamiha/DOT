@@ -74,26 +74,18 @@ export async function disconnectSshKeyAndUser(
 
 export async function manualDisconnectSshKeyAndUser() {
   const user = await chooseUser(false);
-  const ssh = await choseSshKey(false);
+  // const ssh = await choseSshKey(false);
 
   const userName = user?.[0] ?? "Unknown";
-  const sshName = ssh?.[0] ?? "Unknown";
+  const sshName = user?.[1] ?? "Unknown";
 
   if (await checkIsThisActive(userName)) {
     console.log("You can't disconnect active user. Deactivate profile first.");
     return;
   }
-
-  const conectionSSH = user?.[1] ?? "Unknown";
-  console.log(conectionSSH);
-  const conectionUser = ssh?.[1] ?? "Unknown";
-  console.log(conectionUser);
-
-  if (conectionUser === userName || conectionSSH === sshName) {
-    await disconnectSshKeyAndUser(userName, sshName);
-  } else {
-    console.log("This key and user are not connected");
-  }
+    
+  await disconnectSshKeyAndUser(userName, sshName);
+  
 }
 
 export async function deleteSelectedKvObject(key: string, value: string) {

@@ -18,6 +18,7 @@ import {
   deactivateProfile,
   showActiveProfileStatus,
 } from "./commands/activateProfile.ts";
+import { gitClone } from "./commands/gitManager.ts";
 
 // const USERNAME = Deno.env.get("USER");
 // const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/config`;
@@ -26,6 +27,7 @@ async function displayMenu() {
   const result = await Select.prompt({
     message: "Choose an option:",
     options: [
+      { name: "Git clone", value: "0" },
       { name: "Activate Profile", value: "1" },
       { name: "Deactivate Profile", value: "2" },
       { name: "Status", value: "3" },
@@ -43,6 +45,9 @@ async function displayMenu() {
   });
 
   switch (result) {
+    case "0":
+      await gitClone();
+      break;
     case "1":
       await activateProfile();
       break;
