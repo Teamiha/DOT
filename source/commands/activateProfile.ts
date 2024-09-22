@@ -79,33 +79,42 @@ export async function activateProfile() {
   }
 }
 
-export async function showActiveProfileStatus() {
+export async function showActiveProfileStatus(returnData: boolean) {
   const kv = await Deno.openKv();
   const activeProfile = await kv.get(["activeProfile"]);
   const activeSSHKey = await kv.get(["activeSSHKey"]);
   kv.close();
 
   if (activeProfile.value === null || activeSSHKey.value === null) {
-    console.log("No active profile found");
-  } else {
+    console.log("There is no current active profile");
+    return false;
+  }
+
+  if (returnData === false) {
     console.log(
       `Current active profile: ${activeProfile?.value} | Current active SSH key: ${activeSSHKey?.value}`,
     );
+  } else {
+    const username = activeProfile.value;
+    const ssh = activeSSHKey.value;
+
+    return { username, ssh };
   }
 }
 
-export async function showActiveUser() {
-  const kv = await Deno.openKv();
-  const activeProfile = await kv.get(["activeProfile"]);
-  const user = `${activeProfile?.value}`;
-  const activeUser = await kv.get(["userName:", user]);
-  const userValue = activeUser?.value as string ?? undefined;
-  const email = userValue[3];
+// Понять, почему при неактивном юзере, имейл возвращает аномалию
+// export async function showActiveUser() {
+//   const kv = await Deno.openKv();
+//   const activeProfile = await kv.get(["activeProfile"]);
+//   const user = `${activeProfile?.value}`;
+//   const activeUser = await kv.get(["userName:", user]);
+//   const userValue = activeUser?.value as string ?? null;
+//   const email = userValue?.[3] as string ?? null;
 
-  kv.close();
+//   kv.close();
 
-  return [user, email];
-}
+//   return { user, email };
+// }
 
 // Добработать
 export async function deactivateProfile() {
@@ -128,4 +137,10 @@ export async function deactivateProfile() {
 // showActiveProfileStatus();
 // checkIsThisUserActive("Jegnum");
 // deactivateProfile()
-// showActiveUser()
+
+// async function test(){
+//   let data = await showActiveUser()
+//   console.log(data.user)
+//   console.log(data.email)
+// }
+// test()

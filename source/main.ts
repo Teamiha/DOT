@@ -50,7 +50,7 @@ async function displayMenu() {
       deactivateProfile();
       break;
     case "3":
-      await showActiveProfileStatus();
+      await showActiveProfileStatus(false);
       break;
     case "4":
       await createNewUser();
