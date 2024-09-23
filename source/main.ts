@@ -15,7 +15,6 @@ import { confirmTermination } from "../source/commands/clearAllDenoKv.ts";
 import { connectUserToSsh } from "../source/commands/connectUserAndSshKey.ts";
 import {
   activateProfile,
-  deactivateProfile,
   showActiveProfileStatus,
 } from "./commands/activateProfile.ts";
 import { gitClone } from "./commands/gitManager.ts";
@@ -52,7 +51,7 @@ async function displayMenu() {
       await activateProfile();
       break;
     case "2":
-      deactivateProfile();
+      ;
       break;
     case "3":
       await showActiveProfileStatus(false);

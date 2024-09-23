@@ -1,4 +1,3 @@
-// import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { readGitConfigFile } from "./service.ts";
 import { chooseUser } from "./userManager.ts";
 import { zsh } from "@vseplet/shelly";
@@ -23,6 +22,7 @@ function stringifySSHConfig(
   return config.map((entry) => `${entry.key} ${entry.value}`).join("\n");
 }
 
+// Функция универсальна. При необходимости может менять любой пункт активного профиля. 
 async function changeSSHConfig(key: string, newValue: string) {
   const rawData = await readGitConfigFile(PATHTOGITCONFIG);
 
@@ -44,12 +44,12 @@ async function changeSSHConfig(key: string, newValue: string) {
 
 export async function activateProfile() {
   const selectedUser = await chooseUser(false);
-  const selectedUserName = selectedUser?.[0] ?? "Empty";
+  const selectedUserName = selectedUser?.name ?? "Empty";
 
   console.log(selectedUserName);
 
-  const selectedUserSSHKey = selectedUser?.[1] ?? "Empty";
-  const selectedUserEmail = selectedUser?.[2] ?? "Empty";
+  const selectedUserSSHKey = selectedUser?.connectedSSH ?? "Empty";
+  const selectedUserEmail = selectedUser?.email ?? "Empty";
 
   await startupSetup();
 
@@ -102,45 +102,23 @@ export async function showActiveProfileStatus(returnData: boolean) {
   }
 }
 
-// Понять, почему при неактивном юзере, имейл возвращает аномалию
-// export async function showActiveUser() {
+
+
+// Возможно эта система понадобится в дальнейшем
+// export async function deactivateProfile() {
 //   const kv = await Deno.openKv();
 //   const activeProfile = await kv.get(["activeProfile"]);
-//   const user = `${activeProfile?.value}`;
-//   const activeUser = await kv.get(["userName:", user]);
-//   const userValue = activeUser?.value as string ?? null;
-//   const email = userValue?.[3] as string ?? null;
+//   const activeSSHKey = await kv.get(["activeSSHKey"]);
+//   if (activeProfile.value === null || activeSSHKey.value === null) {
+//     console.log("No active profile");
+//   }
+
+//   await kv.delete(["activeProfile"]);
+//   await kv.delete(["activeSSHKey"]);
 
 //   kv.close();
 
-//   return { user, email };
+//   console.log("Profile deactivated successfully");
 // }
 
-// Добработать
-export async function deactivateProfile() {
-  const kv = await Deno.openKv();
-  const activeProfile = await kv.get(["activeProfile"]);
-  const activeSSHKey = await kv.get(["activeSSHKey"]);
-  if (activeProfile.value === null || activeSSHKey.value === null) {
-    console.log("No active profile");
-  }
 
-  await kv.delete(["activeProfile"]);
-  await kv.delete(["activeSSHKey"]);
-
-  kv.close();
-
-  console.log("Profile deactivated successfully");
-}
-
-// activateProfile();
-// showActiveProfileStatus();
-// checkIsThisUserActive("Jegnum");
-// deactivateProfile()
-
-// async function test(){
-//   let data = await showActiveUser()
-//   console.log(data.user)
-//   console.log(data.email)
-// }
-// test()

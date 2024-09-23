@@ -22,8 +22,6 @@ export async function selectUserCore(dataArray: Array<Deno.KvEntry<string>>) {
       email: string;
     };
 
-    // Подумать над возможностью обращаться не через номер массива, а по именам
-
     return [userName, sshKey, email];
   } else {
     return undefined;
@@ -53,12 +51,3 @@ export async function selectSshKeyCore(dataArray: Array<Deno.KvEntry<string>>) {
   }
 }
 
-//----------------------------------------------------------
-
-//   async function testSelectCore() {
-//     const data = await getAllSshKeysList();
-//     const result = await selectSshKeyCore(data);
-//     console.log(result);
-//   };
-
-// testSelectCore();

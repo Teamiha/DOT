@@ -1,13 +1,12 @@
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/input.ts";
 import { chooseUser } from "./userManager.ts";
-import { choseSshKey } from "./sshKeyManager.ts";
+import { string } from "jsr:@cliffy/flags@1.0.0-rc.5";
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
 }
 
 export async function getUserInput(prompt: string): Promise<string> {
-  // console.log(prompt);
   const line = await Input.prompt(prompt);
   const trimmedLine = line.trim();
   if (hasCyrillicCharacters(trimmedLine)) {
@@ -57,7 +56,8 @@ export async function disconnectSshKeyAndUser(
   const kv = await Deno.openKv();
   const user = await kv.get<string>(["userName:", username]);
 
-  const email = user.value?.[3] ?? "Unknown";
+
+  const email = user.value ? user.value[3] : "Empty"; 
 
   await kv.set(["userName:", username], [
     "connectedSSH",
@@ -74,10 +74,9 @@ export async function disconnectSshKeyAndUser(
 
 export async function manualDisconnectSshKeyAndUser() {
   const user = await chooseUser(false);
-  // const ssh = await choseSshKey(false);
 
-  const userName = user?.[0] ?? "Unknown";
-  const sshName = user?.[1] ?? "Unknown";
+  const userName = user?.name ?? "Unknown";
+  const sshName = user?.connectedSSH ?? "Unknown";
 
   if (await checkIsThisActive(userName)) {
     console.log("You can't disconnect active user. Deactivate profile first.");
@@ -127,3 +126,4 @@ export async function checShell() {
     console.log("Unable to determine shell name");
   }
 }
+

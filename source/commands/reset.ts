@@ -1,6 +1,11 @@
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
+// ================ //
+// Work in progress //
+// ================ //
+
+
 // Сделать вариантативность и чекать какой шелл.
 const PATHTOSHELLCONFIG = `${Deno.env.get("HOME")}/.zshrcTest`;
 

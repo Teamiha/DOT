@@ -57,7 +57,7 @@ export async function choseSshKey(showDataInConsole: boolean) {
       console.log("Name:", name, "|", "Conection user:", conection);
       console.log("Public Key:", publicKey);
     } else {
-      return [name, conection];
+      return {name, conection};
     }
   } else {
     console.log("No data found.");
@@ -105,8 +105,3 @@ export async function deleteSshKey() {
     console.log(`Key ${keyName} deleted successfully`);
   }
 }
-
-// createNewSshKey();
-// getAllSshKeysList();
-// selectSshKey()
-// deleteSshKey()

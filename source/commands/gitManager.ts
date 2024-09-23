@@ -2,19 +2,15 @@ import { zsh } from "@vseplet/shelly";
 import { showActiveProfileStatus } from "./activateProfile.ts";
 import { ensureFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
 import { getUserInput } from "./service.ts";
-import { string } from "jsr:@cliffy/flags@1.0.0-rc.5";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 
 const CURRENTDIRECTORY = Deno.cwd();
-const LOCALREPOSITORY = `${CURRENTDIRECTORY}/repository/`;
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
-// const PATHTOTEST = `${Deno.env.get("HOME")}/.ssh/DOT/testconfig`;
-
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+// function delay(ms: number): Promise<void> {
+//   return new Promise((resolve) => setTimeout(resolve, ms));
+// }
 
 export async function gitClone() {
   const activeUserStatus = await showActiveProfileStatus(true);
@@ -47,20 +43,19 @@ export async function gitClone() {
     ssh,
     parseGitUrlData.source,
   );
-  console.log("Update config --- Done.");
+  console.log("Update config..... Done.");
 
   await zsh(`git clone ${gitCloneURL}`);
-  console.log("repository clone --- Done");
+  console.log("Repository clone..... Done");
 
-  await delay(2000);
-  console.log("Delay --- Done");
-
+  // Как то разбить строку 
   await zsh(
-    `git -C ${CURRENTDIRECTORY}/${parseGitUrlData.projectName} remote set-url origin git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`,
+    `git -C ${CURRENTDIRECTORY}/${parseGitUrlData.projectName} \
+    remote set-url origin git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`,
   );
-  console.log("Git set new URL --- Done");
+  console.log("Git set new URL..... Done");
 
-  //   console.log(`git remote set-url origin git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`)
+  console.log("The process has been completed successfully.")
 }
 
 // Как заменить выброс ошибки простым сообщением?
@@ -114,27 +109,3 @@ UserKnownHostsFile ${PATHTODOT}known_hosts`;
   file.close();
 }
 
-async function connectLocalRepositoryToCurrentSSH() {
-}
-
-// async function setCurrentUserAsLocal() {
-//   const activeUser = await showActiveUser();
-//   await zsh(`git config --local user.name "${activeUser[0]}"`);
-//   await zsh(`git config --local user.email "${activeUser[1]}"`);
-// }
-
-// async function test() {
-//   const gitUrl = "git@gitlab.com:petproject2655638/privatetest.git";
-
-//   try {
-//     const { source, username, repository } = parseGitUrl(gitUrl);
-//     console.log("Source:", source);
-//     console.log("Username:", username);
-//     console.log("Repository:", repository);
-//   } catch (error) {
-//     console.error("Error:", error.message);
-//   }
-// }
-
-// test()
-// gitClone();

@@ -21,11 +21,11 @@ export async function connectUserToSsh() {
     return;
   }
 
-  const name = userListResult?.[0] ?? "Unknown";
-  const email = userListResult?.[2] ?? "Unknown";
-  const conectionSSH = userListResult?.[1] ?? "Unknown";
-  const conectionUser = sshListResult?.[1] ?? "Unknown";
-  const nameKey = sshListResult?.[0] ?? "Unknown";
+  const name = userListResult?.name ?? "Unknown";
+  const email = userListResult?.email ?? "Unknown";
+  const conectionSSH = userListResult?.connectedSSH ?? "Unknown";
+  const conectionUser = sshListResult?.conection ?? "Unknown";
+  const nameKey = sshListResult?.name ?? "Unknown";
 
   if (conectionSSH !== "Empty" || conectionUser !== "Empty") {
     console.log("The user or key already has a connection.");
