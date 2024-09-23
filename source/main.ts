@@ -18,6 +18,7 @@ import {
   showActiveProfileStatus,
 } from "./commands/activateProfile.ts";
 import { gitClone } from "./commands/gitManager.ts";
+import { about } from "./commands/about.ts";
 
 async function displayManagerMenu() {
   const result = await Select.prompt({
@@ -69,6 +70,7 @@ async function displayMenu() {
       { name: "List all Users", value: "5" },
       { name: "List all SSH keys", value: "6" },
       { name: "Terminate all DataBase", value: "7" },
+      { name: "About", value: "8" },
       { name: "Exit", value: "10" },
     ],
   });
@@ -95,6 +97,9 @@ async function displayMenu() {
     case "7":
       await confirmTermination();
       break;  
+    case "8":
+      about();
+      break; 
     case "10":
       Deno.exit(0);
       break;
