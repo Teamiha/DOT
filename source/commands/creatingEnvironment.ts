@@ -64,4 +64,3 @@ async function shellSetup() {
   await file.write(encoder.encode("\n" + shellUpdateLine));
   file.close();
 }
-

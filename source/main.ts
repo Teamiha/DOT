@@ -32,7 +32,7 @@ async function displayManagerMenu() {
       { name: "Delete User", value: "6" },
       { name: "Return", value: "7" },
     ],
-  })
+  });
   switch (result) {
     case "1":
       await createNewUser();
@@ -96,10 +96,10 @@ async function displayMenu() {
       break;
     case "7":
       await confirmTermination();
-      break;  
+      break;
     case "8":
       about();
-      break; 
+      break;
     case "10":
       Deno.exit(0);
       break;

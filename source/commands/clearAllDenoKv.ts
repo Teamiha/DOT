@@ -1,6 +1,5 @@
 import { getUserInput } from "./service.ts";
 
-
 // В текущем виде функция чистит ВЕСЬ KV. Нужно потом сделать что бы убирала только следы программы.
 async function clearEntireDatabase(kv: Deno.Kv): Promise<void> {
   const iterator = kv.list({ prefix: [] });

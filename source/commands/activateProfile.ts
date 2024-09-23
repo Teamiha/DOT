@@ -22,7 +22,7 @@ function stringifySSHConfig(
   return config.map((entry) => `${entry.key} ${entry.value}`).join("\n");
 }
 
-// Функция универсальна. При необходимости может менять любой пункт активного профиля. 
+// Функция универсальна. При необходимости может менять любой пункт активного профиля.
 async function changeSSHConfig(key: string, newValue: string) {
   const rawData = await readGitConfigFile(PATHTOGITCONFIG);
 
@@ -102,8 +102,6 @@ export async function showActiveProfileStatus(returnData: boolean) {
   }
 }
 
-
-
 // Возможно эта система понадобится в дальнейшем
 // export async function deactivateProfile() {
 //   const kv = await Deno.openKv();
@@ -120,5 +118,3 @@ export async function showActiveProfileStatus(returnData: boolean) {
 
 //   console.log("Profile deactivated successfully");
 // }
-
-

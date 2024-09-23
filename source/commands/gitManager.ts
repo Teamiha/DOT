@@ -8,10 +8,6 @@ const CURRENTDIRECTORY = Deno.cwd();
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
-// function delay(ms: number): Promise<void> {
-//   return new Promise((resolve) => setTimeout(resolve, ms));
-// }
-
 export async function gitClone() {
   const activeUserStatus = await showActiveProfileStatus(true);
   if (activeUserStatus === false) {
@@ -28,7 +24,6 @@ export async function gitClone() {
     return;
   }
 
-  //   const username = activeUserStatus?.username;
   const ssh = activeUserStatus?.ssh as string ?? "Empty";
   const gitCloneURL = await getUserInput(
     "Paste the link to clone the repository via SSH",
@@ -48,14 +43,15 @@ export async function gitClone() {
   await zsh(`git clone ${gitCloneURL}`);
   console.log("Repository clone..... Done");
 
-  // Как то разбить строку 
   await zsh(
     `git -C ${CURRENTDIRECTORY}/${parseGitUrlData.projectName} \
     remote set-url origin git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`,
   );
+  await zsh(`source ~/.zshrc`);
+
   console.log("Git set new URL..... Done");
 
-  console.log("The process has been completed successfully.")
+  console.log("The process has been completed successfully.");
 }
 
 // Как заменить выброс ошибки простым сообщением?
@@ -108,4 +104,3 @@ UserKnownHostsFile ${PATHTODOT}known_hosts`;
   await file.write(encoder.encode("\n" + "\n" + updateBlock));
   file.close();
 }
-

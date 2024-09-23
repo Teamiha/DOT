@@ -55,8 +55,7 @@ export async function disconnectSshKeyAndUser(
   const kv = await Deno.openKv();
   const user = await kv.get<string>(["userName:", username]);
 
-
-  const email = user.value ? user.value[3] : "Empty"; 
+  const email = user.value ? user.value[3] : "Empty";
 
   await kv.set(["userName:", username], [
     "connectedSSH",
@@ -125,4 +124,3 @@ export async function checShell() {
     console.log("Unable to determine shell name");
   }
 }
-

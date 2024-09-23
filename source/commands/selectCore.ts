@@ -50,4 +50,3 @@ export async function selectSshKeyCore(dataArray: Array<Deno.KvEntry<string>>) {
     return undefined;
   }
 }
-
