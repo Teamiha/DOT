@@ -1,6 +1,5 @@
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/input.ts";
 import { chooseUser } from "./userManager.ts";
-import { string } from "jsr:@cliffy/flags@1.0.0-rc.5";
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);

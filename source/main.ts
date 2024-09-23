@@ -19,71 +19,83 @@ import {
 } from "./commands/activateProfile.ts";
 import { gitClone } from "./commands/gitManager.ts";
 
-// const USERNAME = Deno.env.get("USER");
-// const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/config`;
+async function displayManagerMenu() {
+  const result = await Select.prompt({
+    message: "Choose an option:",
+    options: [
+      { name: "Create new User", value: "1" },
+      { name: "Create new SSH key", value: "2" },
+      { name: "Connect User to SSH key", value: "3" },
+      { name: "Disconnect User to SSH key", value: "4" },
+      { name: "Delete SSH key", value: "5" },
+      { name: "Delete User", value: "6" },
+      { name: "Return", value: "7" },
+    ],
+  })
+  switch (result) {
+    case "1":
+      await createNewUser();
+      break;
+    case "2":
+      await createNewSshKey();
+      break;
+    case "3":
+      await connectUserToSsh();
+      break;
+    case "4":
+      await manualDisconnectSshKeyAndUser();
+      break;
+    case "5":
+      await deleteSshKey();
+      break;
+    case "6":
+      await deleteUser();
+      break;
+    case "7":
+      break;
+    default:
+      console.log("Invalid option");
+  }
+}
 
 async function displayMenu() {
   const result = await Select.prompt({
     message: "Choose an option:",
     options: [
-      { name: "Git clone", value: "0" },
-      { name: "Activate Profile", value: "1" },
-      { name: "Deactivate Profile", value: "2" },
-      { name: "Status", value: "3" },
-      { name: "Create new User", value: "4" },
-      { name: "Create new SSH key", value: "5" },
-      { name: "Connect User to SSH key", value: "6" },
-      { name: "Disconnect User to SSH key", value: "7" },
-      { name: "List all Users", value: "8" },
-      { name: "List all SSH keys", value: "9" },
-      { name: "Delete SSH key", value: "10" },
-      { name: "Delete User", value: "11" },
-      { name: "Terminate all DataBase", value: "20" },
-      { name: "Exit", value: "30" },
+      { name: "Git clone", value: "1" },
+      { name: "Activate Profile", value: "2" },
+      { name: "User and SSH Manager", value: "3" },
+      { name: "Status", value: "4" },
+      { name: "List all Users", value: "5" },
+      { name: "List all SSH keys", value: "6" },
+      { name: "Terminate all DataBase", value: "7" },
+      { name: "Exit", value: "10" },
     ],
   });
 
   switch (result) {
-    case "0":
+    case "1":
       await gitClone();
       break;
-    case "1":
+    case "2":
       await activateProfile();
       break;
-    case "2":
-      ;
-      break;
     case "3":
-      await showActiveProfileStatus(false);
+      await displayManagerMenu();
       break;
     case "4":
-      await createNewUser();
+      await showActiveProfileStatus(false);
       break;
     case "5":
-      await createNewSshKey();
-      break;
-    case "6":
-      await connectUserToSsh();
-      break;
-    case "7":
-      await manualDisconnectSshKeyAndUser();
-      break;
-    case "8":
       await chooseUser(true);
       break;
-    case "9":
+    case "6":
       await choseSshKey(true);
       break;
-    case "10":
-      await deleteSshKey();
-      break;
-    case "11":
-      await deleteUser();
-      break;
-    case "20":
+    case "7":
       await confirmTermination();
-      break;
-    case "30":
+      break;  
+    case "10":
       Deno.exit(0);
       break;
     default:
