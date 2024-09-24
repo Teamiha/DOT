@@ -124,3 +124,4 @@ export async function checShell() {
     console.log("Unable to determine shell name");
   }
 }
+

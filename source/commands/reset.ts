@@ -1,3 +1,5 @@
+import { zsh } from "@vseplet/shelly";
+
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
@@ -7,6 +9,18 @@ const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
 // Сделать вариантативность и чекать какой шелл.
 const PATHTOSHELLCONFIG = `${Deno.env.get("HOME")}/.zshrcTest`;
+
+async function restoreOldUserData() {
+  const kv = await Deno.openKv();
+  const user = await kv.get<string>(["OldUsername"]);
+  const username = user.value ? user.value[0].trim() : "Empty";
+  const email = user.value ? user.value[1].trim() : "Empty";
+
+  kv.close();
+  
+  await zsh(`git config --global user.name ${username}`);
+  await zsh(`git config --global user.email ${email}`);
+}
 
 async function resetShellConfig() {
   const lineToRemove = 'export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG +
@@ -22,5 +36,10 @@ async function resetShellConfig() {
 
   const newContent = newLines.join("\n");
   await Deno.writeTextFile(PATHTOSHELLCONFIG, newContent);
-  console.log("Line removed successfully!");
+  console.log("Shell config restore successfully");
+}
+
+async function deleteDotFolder(folderPath: string): Promise<void> {
+  await Deno.remove(folderPath, { recursive: true });
+  console.log("DOT folder deleted successfully")
 }

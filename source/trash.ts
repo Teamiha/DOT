@@ -1,4 +1,4 @@
-import { zsh } from "@vseplet/shelly";
+import { shelly, zsh } from "@vseplet/shelly";
 import { ensureFile } from "https://deno.land/std/fs/mod.ts";
 
 /*
@@ -63,15 +63,32 @@ const newLine = 'export GIT_SSH_COMMAND="ssh -F /custom/path/ssh_config"';
 //    await zsh(`unset GIT_SSH_COMMAND`);
 // }
 
-async function test(path: string, content: string) {
-  await ensureFile(path);
-  const file = await Deno.open(path, { write: true, append: true });
-  const encoder = new TextEncoder();
-  await file.write(encoder.encode("\n" + content + "\n"));
-  file.close();
+
+
+async function getOldUserData() {
+  const kv = await Deno.openKv();
+  const user = await kv.get<string>(["OldUsername"]);
+
+  // console.log(user)
+
+  // const username = user.value[1];
+  // const email = user.value[1];
+  const username = user.value ? user.value[0].trim() : "Empty";
+  const email = user.value ? user.value[1].trim() : "Empty";
+
+ 
+
+  console.log(username, email);
+
+  kv.close();
+  
 }
 
-// console.log(await test())
-// test(filePath, newLine)
+// createBackupUserData()
+getOldUserData()
 
 // removeLineFromFile(filePath, newLine)
+
+// const path = "/Users/jegnum/Programming/DOTtest/BBK"
+
+

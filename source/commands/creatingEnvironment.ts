@@ -21,6 +21,7 @@ export async function startupSetup() {
   if (status === true) {
     return;
   } else {
+    await createBackupUserData();
     await createEnvironment();
     await shellSetup();
     await zsh('export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG + '"');
@@ -50,6 +51,17 @@ async function createEnvironment() {
 
   await ensureFile(`${PATHTODOT}known_hosts`);
   await Deno.writeTextFile(PATHTOGITCONFIG, initialConfigFilling);
+}
+
+async function createBackupUserData() {
+  const currentUsername = await zsh("git config --global user.name");
+  const currentEmail = await zsh("git config --global user.email");
+  
+  const kv = await Deno.openKv();
+
+  await kv.set(["OldUsername"], [currentUsername.stdout, currentEmail.stdout]);
+
+  kv.close();
 }
 
 async function shellSetup() {

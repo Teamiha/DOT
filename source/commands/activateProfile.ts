@@ -1,10 +1,11 @@
-import { readGitConfigFile } from "./service.ts";
+import { readGitConfigFile, checShell } from "./service.ts";
 import { chooseUser } from "./userManager.ts";
 import { zsh } from "@vseplet/shelly";
 import { startupSetup } from "./creatingEnvironment.ts";
 
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTOSSHKEYS = `${Deno.env.get("HOME")}/.ssh/DOT/`;
+// const SHELL = checShell;
 
 async function setActiveProfile(username: string, sshKey: string) {
   const kv = await Deno.openKv();
@@ -22,7 +23,6 @@ function stringifySSHConfig(
   return config.map((entry) => `${entry.key} ${entry.value}`).join("\n");
 }
 
-// Функция универсальна. При необходимости может менять любой пункт активного профиля.
 async function changeSSHConfig(key: string, newValue: string) {
   const rawData = await readGitConfigFile(PATHTOGITCONFIG);
 
