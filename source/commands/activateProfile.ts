@@ -76,8 +76,9 @@ export async function activateProfile() {
     }
   } else {
     console.log("Error selecting user");
-    console.log("You may need to first create a user and connected it with a key.");
-    
+    console.log(
+      "You may need to first create a user and connected it with a key.",
+    );
   }
 }
 

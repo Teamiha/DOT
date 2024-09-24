@@ -8,6 +8,20 @@ const CURRENTDIRECTORY = Deno.cwd();
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
+async function searchWordInGitConfig(searchWord: string) {
+  const fileContents = await Deno.readTextFile(PATHTOGITCONFIG);
+
+  const lowercaseContents = fileContents.toLowerCase();
+  const lowercaseSearchWord = searchWord.toLowerCase();
+
+  // Check if the search word exists in the file
+  if (lowercaseContents.includes(lowercaseSearchWord)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export async function gitClone() {
   const activeUserStatus = await showActiveProfileStatus(true);
   if (activeUserStatus === false) {
@@ -31,6 +45,13 @@ export async function gitClone() {
   const repositoryName = await getUserInput(
     "Enter a unique name for this clone.",
   );
+  const checkRepositoryName = searchWordInGitConfig(repositoryName);
+
+  if (await checkRepositoryName === true) {
+    console.log("This name is already taken. Please choose another one.");
+    return;
+  }
+
   const parseGitUrlData = await parseGitUrl(gitCloneURL);
 
   await updateConfigToNewLocalRepository(
