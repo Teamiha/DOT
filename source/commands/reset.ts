@@ -18,7 +18,7 @@ export async function fullReset() {
     "Please note that this function will completely remove any changes made by this program.",
   );
   console.log("Including remove profiles and SSH keys created in it.");
-  const confirmed: boolean = await Confirm.prompt("Do you understand?");
+  const confirmed: boolean = await Confirm.prompt("Are you sure you want to continue?");
   if (!confirmed) {
     console.log("Cancel reset");
     return;
