@@ -19,6 +19,34 @@ import {
 } from "./commands/activateProfile.ts";
 import { gitClone } from "./commands/gitManager.ts";
 import { about } from "./commands/about.ts";
+import { fullReset } from "./commands/reset.ts";
+
+async function displaySystemMenu() {
+  const result = await Select.prompt({
+    message: "Choose an option:",
+    options: [
+      { name: "Reset", value: "1" },
+      { name: "About", value: "2" },
+      { name: "Terminate all DataBase", value: "3" },
+      { name: "Return", value: "4" },
+    ],
+  });
+  switch (result) {
+    case "1":
+      await fullReset();
+      break;
+    case "2":
+      await about();
+      break;
+    case "3":
+      await confirmTermination();
+      break;
+    case "4":
+      break;
+    default:
+      console.log("Invalid option");
+  }
+}
 
 async function displayManagerMenu() {
   const result = await Select.prompt({
@@ -69,8 +97,7 @@ async function displayMenu() {
       { name: "Status", value: "4" },
       { name: "List all Users", value: "5" },
       { name: "List all SSH keys", value: "6" },
-      { name: "Terminate all DataBase", value: "7" },
-      { name: "About", value: "8" },
+      { name: "System", value: "7" },
       { name: "Exit", value: "10" },
     ],
   });
@@ -95,10 +122,7 @@ async function displayMenu() {
       await choseSshKey(true);
       break;
     case "7":
-      await confirmTermination();
-      break;
-    case "8":
-      about();
+      await displaySystemMenu();
       break;
     case "10":
       Deno.exit(0);

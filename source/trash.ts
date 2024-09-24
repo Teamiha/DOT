@@ -63,8 +63,6 @@ const newLine = 'export GIT_SSH_COMMAND="ssh -F /custom/path/ssh_config"';
 //    await zsh(`unset GIT_SSH_COMMAND`);
 // }
 
-
-
 async function getOldUserData() {
   const kv = await Deno.openKv();
   const user = await kv.get<string>(["OldUsername"]);
@@ -76,19 +74,14 @@ async function getOldUserData() {
   const username = user.value ? user.value[0].trim() : "Empty";
   const email = user.value ? user.value[1].trim() : "Empty";
 
- 
-
   console.log(username, email);
 
   kv.close();
-  
 }
 
 // createBackupUserData()
-getOldUserData()
+getOldUserData();
 
 // removeLineFromFile(filePath, newLine)
 
 // const path = "/Users/jegnum/Programming/DOTtest/BBK"
-
-

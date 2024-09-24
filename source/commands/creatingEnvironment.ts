@@ -56,7 +56,7 @@ async function createEnvironment() {
 async function createBackupUserData() {
   const currentUsername = await zsh("git config --global user.name");
   const currentEmail = await zsh("git config --global user.email");
-  
+
   const kv = await Deno.openKv();
 
   await kv.set(["OldUsername"], [currentUsername.stdout, currentEmail.stdout]);

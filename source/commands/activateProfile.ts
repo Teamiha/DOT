@@ -1,4 +1,4 @@
-import { readGitConfigFile, checShell } from "./service.ts";
+import { checShell, readGitConfigFile } from "./service.ts";
 import { chooseUser } from "./userManager.ts";
 import { zsh } from "@vseplet/shelly";
 import { startupSetup } from "./creatingEnvironment.ts";
