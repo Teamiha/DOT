@@ -105,19 +105,18 @@ export async function showActiveProfileStatus(returnData: boolean) {
   }
 }
 
-// Возможно эта система понадобится в дальнейшем
-// export async function deactivateProfile() {
-//   const kv = await Deno.openKv();
-//   const activeProfile = await kv.get(["activeProfile"]);
-//   const activeSSHKey = await kv.get(["activeSSHKey"]);
-//   if (activeProfile.value === null || activeSSHKey.value === null) {
-//     console.log("No active profile");
-//   }
+export async function deactivateProfile() {
+  const kv = await Deno.openKv();
+  const activeProfile = await kv.get(["activeProfile"]);
+  const activeSSHKey = await kv.get(["activeSSHKey"]);
+  if (activeProfile.value === null || activeSSHKey.value === null) {
+    console.log("No active profile");
+  }
 
-//   await kv.delete(["activeProfile"]);
-//   await kv.delete(["activeSSHKey"]);
+  await kv.delete(["activeProfile"]);
+  await kv.delete(["activeSSHKey"]);
 
-//   kv.close();
+  kv.close();
 
-//   console.log("Profile deactivated successfully");
-// }
+  console.log("Profile deactivated successfully");
+}

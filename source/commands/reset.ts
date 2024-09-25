@@ -1,13 +1,10 @@
 import { zsh } from "@vseplet/shelly";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { terminateDB } from "./clearAllDenoKv.ts";
+import { deactivateProfile } from "./activateProfile.ts";
 
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT`;
-
-// ================ //
-// Work in progress //
-// ================ //
 
 // Сделать вариантативность и чекать какой шелл.
 const PATHTOSHELLCONFIG = `${Deno.env.get("HOME")}/.zshrcTest`;
@@ -24,6 +21,7 @@ export async function fullReset() {
     return;
   }
 
+  deactivateProfile();
   restoreOldUserData();
   resetShellConfig();
   deleteDotFolder(PATHTODOT);
