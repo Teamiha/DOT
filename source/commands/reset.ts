@@ -13,7 +13,9 @@ export async function fullReset() {
     "Please note that this function will completely remove any changes made by this program.",
   );
   console.log("Including remove profiles and SSH keys created in it.");
-  const confirmed: boolean = await Confirm.prompt("Are you sure you want to continue?");
+  const confirmed: boolean = await Confirm.prompt(
+    "Are you sure you want to continue?",
+  );
   if (!confirmed) {
     console.log("Cancel reset");
     return;
@@ -46,8 +48,7 @@ async function restoreOldUserData() {
 async function resetShellConfig() {
   const shellConfig = await shellConfigFile();
 
-  const pathToShellConfig = `${Deno.env.get("HOME")}/${shellConfig}`; 
-
+  const pathToShellConfig = `${Deno.env.get("HOME")}/${shellConfig}`;
 
   const lineToRemove = 'export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG +
     '"';

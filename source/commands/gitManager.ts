@@ -25,7 +25,7 @@ async function searchWordInGitConfig(searchWord: string) {
 export async function gitClone() {
   const activeUserStatus = await showActiveProfileStatus(true);
   const shell = await shellConfigFile();
-  
+
   if (activeUserStatus === false) {
     console.log("Select and activate a profile first");
     return;

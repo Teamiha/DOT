@@ -84,4 +84,3 @@ export async function deleteUser() {
     console.log("No data found.");
   }
 }
-

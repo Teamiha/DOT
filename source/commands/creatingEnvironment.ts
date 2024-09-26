@@ -5,7 +5,6 @@ import { shellConfigFile } from "./service.ts";
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
-
 const initialConfigFilling = `Host default
 HostName github.com
 User git
@@ -23,7 +22,9 @@ export async function startupSetup() {
     await createBackupUserData();
     await createEnvironment();
     await shellSetup();
-    await executeShellcommand('export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG + '"');
+    await executeShellcommand(
+      'export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG + '"',
+    );
     console.log("Initial setup completed successfully");
   }
 }
@@ -53,8 +54,12 @@ async function createEnvironment() {
 }
 
 async function createBackupUserData() {
-  const currentUsername = await executeShellcommand("git config --global user.name");
-  const currentEmail = await executeShellcommand("git config --global user.email");
+  const currentUsername = await executeShellcommand(
+    "git config --global user.name",
+  );
+  const currentEmail = await executeShellcommand(
+    "git config --global user.email",
+  );
 
   const kv = await Deno.openKv();
 
@@ -66,8 +71,7 @@ async function createBackupUserData() {
 async function shellSetup() {
   const shellConfig = await shellConfigFile();
 
-  const pathToShellConfig = `${Deno.env.get("HOME")}/${shellConfig}`; 
-
+  const pathToShellConfig = `${Deno.env.get("HOME")}/${shellConfig}`;
 
   const shellUpdateLine = 'export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG +
     '"';
