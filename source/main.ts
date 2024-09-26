@@ -21,6 +21,15 @@ import { gitClone } from "./commands/gitManager.ts";
 import { about } from "./commands/about.ts";
 import { fullReset } from "./commands/reset.ts";
 
+const logo = `
+#####     #####   ########
+ ## ##   ### ###  ## ## ##
+ ##  ##  ##   ##     ##
+ ##  ##  ##   ##     ##
+ ##  ##  ##   ##     ##
+ ## ##   ### ###     ##
+#####     #####     #### `
+
 async function displaySystemMenu() {
   const result = await Select.prompt({
     message: "Choose an option:",
@@ -133,6 +142,8 @@ async function displayMenu() {
 }
 
 async function main() {
+  console.log(logo)
+  console.log("")
   while (true) {
     await displayMenu();
     console.log("----------------------------------------");
