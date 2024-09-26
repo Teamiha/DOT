@@ -1,5 +1,6 @@
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/input.ts";
 import { chooseUser } from "./userManager.ts";
+import { zsh, bash, sh } from "@vseplet/shelly";
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
@@ -123,4 +124,32 @@ export async function checShell() {
   } else {
     console.log("Unable to determine shell name");
   }
+}
+
+export async function shellConfigFile() {
+  const shell = await checShell();
+  if (shell === "zsh") {
+    return(".zshrc")
+  } else if (shell === "bash") { 
+    return(".bashrc")
+  } else if (shell === "sh") { 
+    return(".profile")
+  }
+}
+
+export async function executeShellcommand(command: string) {
+  const shellType = await checShell();
+  let result;
+
+  if (shellType === "zsh") {
+     result = await zsh(command);
+  } else if (shellType === "bash") {
+    result = await bash(command);
+  } else if (shellType === "sh") {
+    result = await sh(command);
+  } else {
+  console.log("Error, your shell is not supported");
+  return;
+}
+return result
 }

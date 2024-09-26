@@ -1,6 +1,6 @@
 import { checShell, readGitConfigFile } from "./service.ts";
 import { chooseUser } from "./userManager.ts";
-import { zsh } from "@vseplet/shelly";
+import { executeShellcommand } from "./service.ts";
 import { startupSetup } from "./creatingEnvironment.ts";
 
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
@@ -62,12 +62,8 @@ export async function activateProfile() {
         `${PATHTOSSHKEYS}${selectedUserSSHKey}`,
       ) || { success: false };
       if (newKey.success === true) {
-        await zsh(
-          `git config --global --replace-all user.name ${selectedUserName}`,
-        );
-        await zsh(
-          `git config --global --replace-all user.email ${selectedUserEmail}`,
-        );
+        await executeShellcommand(`git config --global --replace-all user.name ${selectedUserName}`,);
+        await executeShellcommand(`git config --global --replace-all user.email ${selectedUserEmail}`,);
         await setActiveProfile(selectedUserName, selectedUserSSHKey);
         console.log(`Profile ${selectedUserName} activated successfully`);
       } else {

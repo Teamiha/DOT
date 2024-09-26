@@ -1,7 +1,7 @@
-import { zsh } from "@vseplet/shelly";
+import { executeShellcommand } from "./service.ts";
 import { showActiveProfileStatus } from "./activateProfile.ts";
 import { ensureFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
-import { getUserInput } from "./service.ts";
+import { getUserInput, shellConfigFile } from "./service.ts";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 
 const CURRENTDIRECTORY = Deno.cwd();
@@ -24,6 +24,8 @@ async function searchWordInGitConfig(searchWord: string) {
 
 export async function gitClone() {
   const activeUserStatus = await showActiveProfileStatus(true);
+  const shell = await shellConfigFile();
+  
   if (activeUserStatus === false) {
     console.log("Select and activate a profile first");
     return;
@@ -61,14 +63,15 @@ export async function gitClone() {
   );
   console.log("Update config..... Done.");
 
-  await zsh(`git clone ${gitCloneURL}`);
+  await executeShellcommand(`git clone ${gitCloneURL}`);
   console.log("Repository clone..... Done");
 
-  await zsh(
+  await executeShellcommand(
     `git -C ${CURRENTDIRECTORY}/${parseGitUrlData.projectName} \
     remote set-url origin git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`,
   );
-  await zsh(`source ~/.zshrc`);
+
+  await executeShellcommand(`source ~/${shell}`);
 
   console.log("Git set new URL..... Done");
 

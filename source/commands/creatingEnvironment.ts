@@ -1,11 +1,10 @@
 import { ensureFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
-import { zsh } from "@vseplet/shelly";
+import { executeShellcommand } from "./service.ts";
+import { shellConfigFile } from "./service.ts";
 
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
 
-// Сделать вариантативность и чекать какой шелл.
-const PATHTOSHELLCONFIG = `${Deno.env.get("HOME")}/.zshrc`;
 
 const initialConfigFilling = `Host default
 HostName github.com
@@ -24,7 +23,7 @@ export async function startupSetup() {
     await createBackupUserData();
     await createEnvironment();
     await shellSetup();
-    await zsh('export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG + '"');
+    await executeShellcommand('export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG + '"');
     console.log("Initial setup completed successfully");
   }
 }
@@ -54,8 +53,8 @@ async function createEnvironment() {
 }
 
 async function createBackupUserData() {
-  const currentUsername = await zsh("git config --global user.name");
-  const currentEmail = await zsh("git config --global user.email");
+  const currentUsername = await executeShellcommand("git config --global user.name");
+  const currentEmail = await executeShellcommand("git config --global user.email");
 
   const kv = await Deno.openKv();
 
@@ -65,10 +64,15 @@ async function createBackupUserData() {
 }
 
 async function shellSetup() {
+  const shellConfig = await shellConfigFile();
+
+  const pathToShellConfig = `${Deno.env.get("HOME")}/${shellConfig}`; 
+
+
   const shellUpdateLine = 'export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG +
     '"';
-  await ensureFile(PATHTOSHELLCONFIG);
-  const file = await Deno.open(PATHTOSHELLCONFIG, {
+  await ensureFile(pathToShellConfig);
+  const file = await Deno.open(pathToShellConfig, {
     write: true,
     append: true,
   });

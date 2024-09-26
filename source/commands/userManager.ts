@@ -85,7 +85,3 @@ export async function deleteUser() {
   }
 }
 
-// createNewProfile();
-
-// getProfileList()
-// chooseProfile()

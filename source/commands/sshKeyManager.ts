@@ -1,4 +1,4 @@
-import { zsh } from "@vseplet/shelly";
+import { executeShellcommand } from "./service.ts";
 import { selectSshKeyCore } from "./selectCore.ts";
 import {
   deleteSelectedKvObject,
@@ -17,7 +17,7 @@ export async function createNewSshKey() {
 
   const name = await getUserInput("Enter a name for the SSH key:");
   const email = await getUserInput("Enter your email:");
-  const ssh = await zsh(
+  const ssh = await executeShellcommand(
     `ssh-keygen -t ed25519 -C ${email} -f ~/.ssh/DOT/${name}`,
   );
   const connectedUser = "Empty";
@@ -25,7 +25,7 @@ export async function createNewSshKey() {
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
     await kv.set(["sshKeyName:", name], ["connectedUser", connectedUser]);
-    await zsh(`ssh-add -K ~/.ssh/DOT/${name}`);
+    await executeShellcommand(`ssh-add -K ~/.ssh/DOT/${name}`);
   } else {
     console.log("Error: SSH key generation failed");
   }
@@ -96,8 +96,8 @@ export async function deleteSshKey() {
     }
 
     await deleteSelectedKvObject("sshKeyName:", keyName);
-    await zsh(`ssh-add -d ~/.ssh/DOT/${keyName}`);
-    await zsh(
+    await executeShellcommand(`ssh-add -d ~/.ssh/DOT/${keyName}`);
+    await executeShellcommand(
       `security delete-generic-password -l "SSH: ~/.ssh/DOT/${keyName}"`,
     );
     await Deno.remove(pathToDelete);
