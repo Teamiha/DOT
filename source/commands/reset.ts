@@ -1,4 +1,5 @@
-import { executeShellcommand } from "./service.ts";
+// import { executeShellcommand } from "./service.ts";
+import { shelly } from "@vseplet/shelly";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { terminateDB } from "./clearAllDenoKv.ts";
 import { deactivateProfile } from "./activateProfile.ts";
@@ -39,8 +40,8 @@ async function restoreOldUserData() {
 
   kv.close();
 
-  await executeShellcommand(`git config --global user.name ${username}`);
-  await executeShellcommand(`git config --global user.email ${email}`);
+  await shelly(["git", "config", "--global", "user.name", `${username}`]);
+  await shelly(["git", "config", "--global", "user.email", `${email}`]);
 
   console.log("Old GIT username and email restore successfully");
 }

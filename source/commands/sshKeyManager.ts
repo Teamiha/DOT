@@ -1,4 +1,5 @@
-import { executeShellcommand } from "./service.ts";
+// import { executeShellcommand } from "./service.ts";
+import { shelly } from "@vseplet/shelly";
 import { selectSshKeyCore } from "./selectCore.ts";
 import {
   deleteSelectedKvObject,
@@ -10,6 +11,8 @@ import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/confirm.t
 import { checkIsThisActive } from "./service.ts";
 import { startupSetup } from "./creatingEnvironment.ts";
 
+const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
+
 export async function createNewSshKey() {
   await startupSetup();
 
@@ -17,15 +20,13 @@ export async function createNewSshKey() {
 
   const name = await getUserInput("Enter a name for the SSH key:");
   const email = await getUserInput("Enter your email:");
-  const ssh = await executeShellcommand(
-    `ssh-keygen -t ed25519 -C ${email} -f ~/.ssh/DOT/${name}`,
-  );
+  const ssh = await shelly(["ssh-keygen", "-t", "ed25519", "-C", `${email}`, "-f", `${PATHTODOT}${name}`]);
   const connectedUser = "Empty";
 
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
     await kv.set(["sshKeyName:", name], ["connectedUser", connectedUser]);
-    await executeShellcommand(`ssh-add -K ~/.ssh/DOT/${name}`);
+    await shelly(["ssh-add", "-K", `${PATHTODOT}${name}`]);
   } else {
     console.log("Error: SSH key generation failed");
   }
@@ -96,10 +97,8 @@ export async function deleteSshKey() {
     }
 
     await deleteSelectedKvObject("sshKeyName:", keyName);
-    await executeShellcommand(`ssh-add -d ~/.ssh/DOT/${keyName}`);
-    await executeShellcommand(
-      `security delete-generic-password -l "SSH: ~/.ssh/DOT/${keyName}"`,
-    );
+    await shelly(["ssh-add", "-d", `${PATHTODOT}${keyName}`]);
+    await shelly(["security", "delete-generic-password", "-l", "SSH:", `${PATHTODOT}${keyName}`]);
     await Deno.remove(pathToDelete);
     await Deno.remove(pathToDeletePubKey);
     console.log(`Key ${keyName} deleted successfully`);

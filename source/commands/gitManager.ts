@@ -1,4 +1,5 @@
-import { executeShellcommand } from "./service.ts";
+// import { executeShellcommand } from "./service.ts";
+import { shelly } from "@vseplet/shelly";
 import { showActiveProfileStatus } from "./activateProfile.ts";
 import { ensureFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
 import { getUserInput, shellConfigFile } from "./service.ts";
@@ -63,15 +64,12 @@ export async function gitClone() {
   );
   console.log("Update config..... Done.");
 
-  await executeShellcommand(`git clone ${gitCloneURL}`);
+  await shelly(["git", "clone", `${gitCloneURL}`]);
   console.log("Repository clone..... Done");
 
-  await executeShellcommand(
-    `git -C ${CURRENTDIRECTORY}/${parseGitUrlData.projectName} \
-    remote set-url origin git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`,
-  );
+  await shelly(["git", "-C", `${CURRENTDIRECTORY}/${parseGitUrlData.projectName}`, "remote", "set-url", "origin", `git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`]);
 
-  await executeShellcommand(`source ~/${shell}`);
+  await shelly(["source", `~/${shell}`]);
 
   console.log("Git set new URL..... Done");
 
