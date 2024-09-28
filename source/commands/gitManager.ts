@@ -8,6 +8,7 @@ import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 const CURRENTDIRECTORY = Deno.cwd();
 const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
 const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
+const PATHHOME = `${Deno.env.get("HOME")}/`;
 
 async function searchWordInGitConfig(searchWord: string) {
   const fileContents = await Deno.readTextFile(PATHTOGITCONFIG);
@@ -15,7 +16,6 @@ async function searchWordInGitConfig(searchWord: string) {
   const lowercaseContents = fileContents.toLowerCase();
   const lowercaseSearchWord = searchWord.toLowerCase();
 
-  // Check if the search word exists in the file
   if (lowercaseContents.includes(lowercaseSearchWord)) {
     return true;
   } else {
@@ -67,9 +67,17 @@ export async function gitClone() {
   await shelly(["git", "clone", `${gitCloneURL}`]);
   console.log("Repository clone..... Done");
 
-  await shelly(["git", "-C", `${CURRENTDIRECTORY}/${parseGitUrlData.projectName}`, "remote", "set-url", "origin", `git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`]);
+  await shelly([
+    "git",
+    "-C",
+    `${CURRENTDIRECTORY}/${parseGitUrlData.projectName}`,
+    "remote",
+    "set-url",
+    "origin",
+    `git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`,
+  ]);
 
-  await shelly(["source", `~/${shell}`]);
+  await shelly(["source", `${PATHHOME}${shell}`]);
 
   console.log("Git set new URL..... Done");
 

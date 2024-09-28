@@ -1,5 +1,4 @@
 import { ensureFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
-// import { executeShellcommand } from "./service.ts";
 import { shelly } from "@vseplet/shelly";
 import { shellConfigFile } from "./service.ts";
 
@@ -23,7 +22,6 @@ export async function startupSetup() {
     await createBackupUserData();
     await createEnvironment();
     await shellSetup();
-    // await ('export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG + '"',);
     await shelly(["export", `GIT_SSH_COMMAND="ssh -F ' + ${PATHTOGITCONFIG}"`]);
     console.log("Initial setup completed successfully");
   }
@@ -54,8 +52,18 @@ async function createEnvironment() {
 }
 
 async function createBackupUserData() {
-  const currentUsername = await shelly(["git", "config", "--global", "user.name"]);
-  const currentEmail = await shelly(["git", "config", "--global", "user.email"]);
+  const currentUsername = await shelly([
+    "git",
+    "config",
+    "--global",
+    "user.name",
+  ]);
+  const currentEmail = await shelly([
+    "git",
+    "config",
+    "--global",
+    "user.email",
+  ]);
 
   const kv = await Deno.openKv();
 

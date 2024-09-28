@@ -1,4 +1,3 @@
-// import { Command } from "../deps.ts";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { manualDisconnectSshKeyAndUser } from "./commands/service.ts";
 import {
@@ -11,7 +10,6 @@ import {
   createNewSshKey,
   deleteSshKey,
 } from "./commands/sshKeyManager.ts";
-import { confirmTermination } from "../source/commands/clearAllDenoKv.ts";
 import { connectUserToSsh } from "../source/commands/connectUserAndSshKey.ts";
 import {
   activateProfile,
@@ -28,7 +26,7 @@ const logo = `
  ##  ##  ##   ##     ##
  ##  ##  ##   ##     ##
  ## ##   ### ###     ##
-#####     #####     #### `
+#####     #####     #### `;
 
 async function displaySystemMenu() {
   const result = await Select.prompt({
@@ -36,7 +34,6 @@ async function displaySystemMenu() {
     options: [
       { name: "Reset", value: "1" },
       { name: "About", value: "2" },
-      { name: "Terminate all DataBase", value: "3" },
       { name: "Return", value: "4" },
     ],
   });
@@ -46,9 +43,6 @@ async function displaySystemMenu() {
       break;
     case "2":
       await about();
-      break;
-    case "3":
-      await confirmTermination();
       break;
     case "4":
       break;
@@ -142,8 +136,8 @@ async function displayMenu() {
 }
 
 async function main() {
-  console.log(logo)
-  console.log("")
+  console.log(logo);
+  console.log("");
   while (true) {
     await displayMenu();
     console.log("----------------------------------------");

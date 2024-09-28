@@ -1,7 +1,7 @@
 // import { executeShellcommand } from "./service.ts";
 import { shelly } from "@vseplet/shelly";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
-import { terminateDB } from "./clearAllDenoKv.ts";
+import { terminateDB } from "./clearDenoKv.ts";
 import { deactivateProfile } from "./activateProfile.ts";
 import { shellConfigFile } from "./service.ts";
 

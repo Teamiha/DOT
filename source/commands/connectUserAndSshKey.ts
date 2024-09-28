@@ -39,5 +39,3 @@ export async function connectUserToSsh() {
 
   await keyRecording(name, nameKey, email);
 }
-
-// connectUserToSsh();

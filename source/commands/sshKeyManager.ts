@@ -20,7 +20,15 @@ export async function createNewSshKey() {
 
   const name = await getUserInput("Enter a name for the SSH key:");
   const email = await getUserInput("Enter your email:");
-  const ssh = await shelly(["ssh-keygen", "-t", "ed25519", "-C", `${email}`, "-f", `${PATHTODOT}${name}`]);
+  const ssh = await shelly([
+    "ssh-keygen",
+    "-t",
+    "ed25519",
+    "-C",
+    `${email}`,
+    "-f",
+    `${PATHTODOT}${name}`,
+  ]);
   const connectedUser = "Empty";
 
   if (ssh.success === true) {
@@ -98,7 +106,13 @@ export async function deleteSshKey() {
 
     await deleteSelectedKvObject("sshKeyName:", keyName);
     await shelly(["ssh-add", "-d", `${PATHTODOT}${keyName}`]);
-    await shelly(["security", "delete-generic-password", "-l", "SSH:", `${PATHTODOT}${keyName}`]);
+    await shelly([
+      "security",
+      "delete-generic-password",
+      "-l",
+      "SSH:",
+      `${PATHTODOT}${keyName}`,
+    ]);
     await Deno.remove(pathToDelete);
     await Deno.remove(pathToDeletePubKey);
     console.log(`Key ${keyName} deleted successfully`);
