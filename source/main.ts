@@ -90,7 +90,7 @@ async function displayManagerMenu() {
   }
 }
 
-async function displayMenu() {
+export async function displayMenu() {
   const result = await Select.prompt({
     message: "Choose an option:",
     options: [

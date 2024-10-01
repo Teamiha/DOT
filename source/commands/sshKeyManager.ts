@@ -1,4 +1,3 @@
-// import { executeShellcommand } from "./service.ts";
 import { shelly } from "@vseplet/shelly";
 import { selectSshKeyCore } from "./selectCore.ts";
 import {
