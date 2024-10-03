@@ -18,7 +18,7 @@ import {
 import { gitClone } from "./commands/gitManager.ts";
 import { about } from "./commands/about.ts";
 import { fullReset } from "./commands/reset.ts";
-import { update } from "./commands/update.ts";
+import { update, autoUpdate } from "./commands/update.ts";
 
 
 const logo = `
@@ -142,6 +142,7 @@ export async function displayMenu() {
 }
 
 async function main() {
+  await autoUpdate();
   console.log(logo);
   console.log("");
   while (true) {
