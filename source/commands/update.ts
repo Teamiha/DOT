@@ -8,7 +8,7 @@ const CURRENT_VERSION = localDenoJson["version"];
 
 export async function update() {
   const latestVersion = await getLatestVersion();
-  if (latestVersion > CURRENT_VERSION) {
+  if (latestVersion !== CURRENT_VERSION) {
     console.log("Updating to the latest version...");
     await shelly(["deno",
         "install",
