@@ -3,7 +3,8 @@ import localDenoJson from "../../deno.json" with { type: "json" };
 import { fetchJSON } from "./service.ts";
 
 const ENTRYPOINT_SOURCE_URL = "https://raw.githubusercontent.com/vseplet/DOT/refs/heads/MikhailPlayground/source/main.ts"
-const CURRENT_VERSION = "0.8.0"
+const IMPORT_MAP_URL = "https://raw.githubusercontent.com/vseplet/DOT/refs/heads/MikhailPlayground/importMap.json"
+const CURRENT_VERSION = localDenoJson["version"];
 
 export async function update() {
   const latestVersion = await getLatestVersion();
@@ -16,6 +17,7 @@ export async function update() {
         "--allow-net",
         "--allow-run",
         "--unstable-kv",
+        "--import-map="+IMPORT_MAP_URL,
         "-n",
         "pp",
         ENTRYPOINT_SOURCE_URL,]);

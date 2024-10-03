@@ -18,6 +18,8 @@ import {
 import { gitClone } from "./commands/gitManager.ts";
 import { about } from "./commands/about.ts";
 import { fullReset } from "./commands/reset.ts";
+import { update } from "./commands/update.ts";
+
 
 const logo = `
 #####     #####   ########
@@ -34,6 +36,7 @@ async function displaySystemMenu() {
     options: [
       { name: "Reset", value: "1" },
       { name: "About", value: "2" },
+      { name: "Update", value: "3" },
       { name: "Return", value: "4" },
     ],
   });
@@ -43,6 +46,9 @@ async function displaySystemMenu() {
       break;
     case "2":
       await about();
+      break;
+    case "3":
+      await update();
       break;
     case "4":
       break;
