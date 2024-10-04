@@ -38,7 +38,8 @@ async function getLatestVersion() {
 export async function autoUpdate() {
   const latestVersion = await getLatestVersion();
   if (latestVersion !== CURRENT_VERSION) {
-    console.log("Updating to the latest version...");
+    console.log("DOT is outdated. Updating to the latest version...");
     await update();
+    console.log("DOT updated successfully");
   }
 }
