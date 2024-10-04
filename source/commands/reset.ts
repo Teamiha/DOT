@@ -1,7 +1,5 @@
-// import { executeShellcommand } from "./service.ts";
 import { shelly } from "@vseplet/shelly";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
-import { terminateDB } from "./clearDenoKv.ts";
 import { deactivateProfile } from "./activateProfile.ts";
 import { shellConfigFile } from "./helpers.ts";
 import { PATH_TO_DOT, PATH_TO_GIT_CONFIG } from "../constants.ts";
@@ -68,4 +66,25 @@ async function resetShellConfig() {
 async function deleteDotFolder(folderPath: string): Promise<void> {
   await Deno.remove(folderPath, { recursive: true });
   console.log("DOT folder deleted successfully");
+}
+
+async function terminateDB() {
+  const kv = await Deno.openKv();
+  await deletionDenoKvTemplate(kv, "activeProfile");
+  await deletionDenoKvTemplate(kv, "activeSSHKey");
+  await deletionDenoKvTemplate(kv, "userName:");
+  await deletionDenoKvTemplate(kv, "sshKeyName:");
+  await deletionDenoKvTemplate(kv, "OldUsername");
+  kv.close();
+}
+
+async function deletionDenoKvTemplate(kv: Deno.Kv, key: string): Promise<void> {
+  const iterator = kv.list({ prefix: [key] });
+  const batch = kv.atomic();
+
+  for await (const entry of iterator) {
+    batch.delete(entry.key);
+  }
+
+  await batch.commit();
 }
