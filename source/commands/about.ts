@@ -10,4 +10,3 @@ Version: ${CURRENT_VERSION}
 export function about() {
   console.log(aboutText);
 }
-

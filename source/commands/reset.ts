@@ -3,10 +3,8 @@ import { shelly } from "@vseplet/shelly";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { terminateDB } from "./clearDenoKv.ts";
 import { deactivateProfile } from "./activateProfile.ts";
-import { shellConfigFile } from "./service.ts";
-
-const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
-const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT`;
+import { shellConfigFile } from "./helpers.ts";
+import { PATH_TO_DOT, PATH_TO_GIT_CONFIG } from "../constants.ts";
 
 export async function fullReset() {
   console.log("WARNING");
@@ -25,7 +23,7 @@ export async function fullReset() {
   deactivateProfile();
   restoreOldUserData();
   resetShellConfig();
-  deleteDotFolder(PATHTODOT);
+  deleteDotFolder(PATH_TO_DOT);
   terminateDB();
   console.log("Database cleared.");
 
@@ -51,7 +49,7 @@ async function resetShellConfig() {
 
   const pathToShellConfig = `${Deno.env.get("HOME")}/${shellConfig}`;
 
-  const lineToRemove = 'export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG +
+  const lineToRemove = 'export GIT_SSH_COMMAND="ssh -F ' + PATH_TO_GIT_CONFIG +
     '"';
   const fileContent = await Deno.readTextFile(pathToShellConfig);
   const lines = fileContent.split("\n");

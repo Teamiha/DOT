@@ -1,17 +1,17 @@
-// import { executeShellcommand } from "./service.ts";
 import { shelly } from "@vseplet/shelly";
 import { showActiveProfileStatus } from "./activateProfile.ts";
 import { ensureFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
-import { getUserInput, shellConfigFile } from "./service.ts";
+import { getUserInput, shellConfigFile } from "./helpers.ts";
 import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
-
-const CURRENTDIRECTORY = Deno.cwd();
-const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
-const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
-const PATHHOME = `${Deno.env.get("HOME")}/`;
+import {
+  CURRENT_DIRECTORY,
+  PATH_HOME,
+  PATH_TO_DOT,
+  PATH_TO_GIT_CONFIG,
+} from "../constants.ts";
 
 async function searchWordInGitConfig(searchWord: string) {
-  const fileContents = await Deno.readTextFile(PATHTOGITCONFIG);
+  const fileContents = await Deno.readTextFile(PATH_TO_GIT_CONFIG);
 
   const lowercaseContents = fileContents.toLowerCase();
   const lowercaseSearchWord = searchWord.toLowerCase();
@@ -70,14 +70,14 @@ export async function gitClone() {
   await shelly([
     "git",
     "-C",
-    `${CURRENTDIRECTORY}/${parseGitUrlData.projectName}`,
+    `${CURRENT_DIRECTORY}/${parseGitUrlData.projectName}`,
     "remote",
     "set-url",
     "origin",
     `git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`,
   ]);
 
-  await shelly(["source", `${PATHHOME}${shell}`]);
+  await shelly(["source", `${PATH_HOME}${shell}`]);
 
   console.log("Git set new URL..... Done");
 
@@ -123,10 +123,10 @@ AddKeysToAgent yes
 UseKeychain yes
 IdentityFile ${Deno.env.get("HOME")}/.ssh/DOT/${sshKey}
 IdentitiesOnly yes
-UserKnownHostsFile ${PATHTODOT}known_hosts`;
+UserKnownHostsFile ${PATH_TO_DOT}known_hosts`;
 
-  await ensureFile(PATHTOGITCONFIG);
-  const file = await Deno.open(PATHTOGITCONFIG, {
+  await ensureFile(PATH_TO_GIT_CONFIG);
+  const file = await Deno.open(PATH_TO_GIT_CONFIG, {
     write: true,
     append: true,
   });

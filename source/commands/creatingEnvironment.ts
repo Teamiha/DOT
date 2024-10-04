@@ -1,9 +1,7 @@
 import { ensureFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
 import { shelly } from "@vseplet/shelly";
-import { shellConfigFile } from "./service.ts";
-
-const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
-const PATHTODOT = `${Deno.env.get("HOME")}/.ssh/DOT/`;
+import { shellConfigFile } from "./helpers.ts";
+import { PATH_TO_DOT, PATH_TO_GIT_CONFIG } from "../constants.ts";
 
 const initialConfigFilling = `Host default
 HostName github.com
@@ -12,7 +10,7 @@ AddKeysToAgent yes
 UseKeychain yes
 IdentityFile empty
 IdentitiesOnly yes
-UserKnownHostsFile ${PATHTODOT}known_hosts`;
+UserKnownHostsFile ${PATH_TO_DOT}known_hosts`;
 
 export async function startupSetup() {
   const status = await checkIfDotFolderExist();
@@ -22,7 +20,10 @@ export async function startupSetup() {
     await createBackupUserData();
     await createEnvironment();
     await shellSetup();
-    await shelly(["export", `GIT_SSH_COMMAND="ssh -F ' + ${PATHTOGITCONFIG}"`]);
+    await shelly([
+      "export",
+      `GIT_SSH_COMMAND="ssh -F ' + ${PATH_TO_GIT_CONFIG}"`,
+    ]);
     console.log("Initial setup completed successfully");
   }
 }
@@ -30,7 +31,7 @@ export async function startupSetup() {
 export async function checkIfDotFolderExist(): Promise<boolean> {
   let isExist = false;
   try {
-    const dirInfo = await Deno.stat(PATHTODOT);
+    const dirInfo = await Deno.stat(PATH_TO_DOT);
     if (dirInfo.isDirectory) {
       isExist = true;
     }
@@ -43,12 +44,12 @@ export async function checkIfDotFolderExist(): Promise<boolean> {
 }
 
 async function createEnvironment() {
-  await Deno.mkdir(PATHTODOT, { recursive: true });
+  await Deno.mkdir(PATH_TO_DOT, { recursive: true });
 
-  await ensureFile(PATHTOGITCONFIG);
+  await ensureFile(PATH_TO_GIT_CONFIG);
 
-  await ensureFile(`${PATHTODOT}known_hosts`);
-  await Deno.writeTextFile(PATHTOGITCONFIG, initialConfigFilling);
+  await ensureFile(`${PATH_TO_DOT}known_hosts`);
+  await Deno.writeTextFile(PATH_TO_GIT_CONFIG, initialConfigFilling);
 }
 
 async function createBackupUserData() {
@@ -77,7 +78,8 @@ async function shellSetup() {
 
   const pathToShellConfig = `${Deno.env.get("HOME")}/${shellConfig}`;
 
-  const shellUpdateLine = 'export GIT_SSH_COMMAND="ssh -F ' + PATHTOGITCONFIG +
+  const shellUpdateLine = 'export GIT_SSH_COMMAND="ssh -F ' +
+    PATH_TO_GIT_CONFIG +
     '"';
   await ensureFile(pathToShellConfig);
   const file = await Deno.open(pathToShellConfig, {

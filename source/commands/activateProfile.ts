@@ -1,10 +1,8 @@
-import { readGitConfigFile } from "./service.ts";
+import { readGitConfigFile } from "./helpers.ts";
 import { chooseUser } from "./userManager.ts";
 import { shelly } from "@vseplet/shelly";
 import { startupSetup } from "./creatingEnvironment.ts";
-
-const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
-const PATHTOSSHKEYS = `${Deno.env.get("HOME")}/.ssh/DOT/`;
+import { PATH_TO_DOT, PATH_TO_GIT_CONFIG } from "../constants.ts";
 
 async function setActiveProfile(username: string, sshKey: string) {
   const kv = await Deno.openKv();
@@ -23,14 +21,14 @@ function stringifySSHConfig(
 }
 
 async function changeSSHConfig(key: string, newValue: string) {
-  const rawData = await readGitConfigFile(PATHTOGITCONFIG);
+  const rawData = await readGitConfigFile(PATH_TO_GIT_CONFIG);
 
   if (rawData !== undefined) {
     const entry = rawData.find((entry) => entry.key === key);
     if (entry) {
       entry.value = newValue;
       const convertResult = stringifySSHConfig(rawData);
-      await Deno.writeTextFile(PATHTOGITCONFIG, convertResult);
+      await Deno.writeTextFile(PATH_TO_GIT_CONFIG, convertResult);
       return { success: true };
     } else {
       console.error(`Key "${key}" not found in the config.`);
@@ -58,7 +56,7 @@ export async function activateProfile() {
     } else {
       const newKey = await changeSSHConfig(
         "IdentityFile",
-        `${PATHTOSSHKEYS}${selectedUserSSHKey}`,
+        `${PATH_TO_DOT}${selectedUserSSHKey}`,
       ) || { success: false };
       if (newKey.success === true) {
         await shelly([

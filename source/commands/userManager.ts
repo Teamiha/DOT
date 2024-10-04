@@ -3,8 +3,8 @@ import {
   deleteSelectedKvObject,
   disconnectSshKeyAndUser,
   getUserInput,
-} from "./service.ts";
-import { checkIsThisActive } from "./service.ts";
+} from "./helpers.ts";
+import { checkIsThisActive } from "./helpers.ts";
 
 export async function createNewUser() {
   const name = await getUserInput("Please enter a name:");

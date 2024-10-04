@@ -18,8 +18,7 @@ import {
 import { gitClone } from "./commands/gitManager.ts";
 import { about } from "./commands/about.ts";
 import { fullReset } from "./commands/reset.ts";
-import { update, autoUpdate } from "./commands/update.ts";
-
+import { autoUpdate, update } from "./commands/update.ts";
 
 const logo = `
 #####     #####   ########
